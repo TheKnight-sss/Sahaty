@@ -6,11 +6,11 @@ class SharedPref {
   static const String kadminData = "adminDate";
   static const String kcoRepData = "coRepDate";
 
-  static init() async {
+  static Future<void> init() async {
     pref = await SharedPreferences.getInstance();
   }
 
-  static saveData(String key, dynamic value) {
+  static void saveData(String key, dynamic value) {
     if (value is int) {
       pref.setInt(key, value);
     } else if (value is String) {
@@ -26,7 +26,7 @@ class SharedPref {
     return pref.get(key);
   }
 
- static remove(String key) async {
+ static Future<void> remove(String key) async {
     await pref.remove(key);
   }
 }

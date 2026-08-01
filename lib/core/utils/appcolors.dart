@@ -11,6 +11,8 @@ class Appcolors {
   static const Color l1 = Color(0xFF2563EB);
   static const Color l2 = Color(0xFF1D4ED8);
   static const Color l3 = Color(0xFF1E40AF);
+  static const Color slider = Color(0xFF22C55E);
+  static const Color slcard = Color(0xFF9CA3AF);
 
   
 }

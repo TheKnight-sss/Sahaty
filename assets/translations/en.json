@@ -1,1 +1,15 @@
-{}
+{
+    "صحتي" : "Sahaty",
+    "لوحة تحكم المخزون والطلبات":"Inventory and Orders Dashboard",
+    "الإيراد (جنيه)" : "Revenue (EGP)",
+    "المخزون":"Inventory",
+    "الطلبات": "Orders",
+    "حالة المخزون" : "Inventory State",
+    "موتزريلا نباتي":"Vegan Mozzarella",
+    "موتزريلا طبيعي" : "Natural Mozzarella",
+    "موتزريلا مكس جبن" : "Mozzarella Cheese Mix",
+    "الإجمالي" : "Total",
+    " في التوصيل" :"On Delivery",
+    "المتبقي":"Remaining",
+    "كافٍ" : "Enough"
+}

@@ -27,4 +27,22 @@ class Style {
     fontWeight: FontWeight.w500,
     color: Color(0xFF333333),
   );
+
+  static const TextStyle header = TextStyle(
+    fontSize: 30,
+    fontWeight: FontWeight.w700,
+    color: Colors.white
+  );
+
+  static const TextStyle subheader = TextStyle(
+    color: Color(0xFFBFDBFE),
+    fontSize: 15,
+    fontWeight: FontWeight.w400
+  );
+
+  static const TextStyle tab = TextStyle(
+    color: Colors.black,
+    fontSize: 16,
+    fontWeight: FontWeight.w400
+  );
 }

@@ -38,6 +38,7 @@ class MyApp extends StatelessWidget {
       routerConfig: Routes.route,
       theme: AppTheme.lightTheme,
       debugShowCheckedModeBanner: false,
+      locale: context.locale,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
     );
