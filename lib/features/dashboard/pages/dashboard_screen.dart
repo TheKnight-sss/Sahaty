@@ -4,6 +4,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:sihati/core/constants/app_images.dart';
 import 'package:sihati/core/functions/extension.dart';
+import 'package:sihati/core/routes/navigation.dart';
+import 'package:sihati/core/routes/routes.dart';
 import 'package:sihati/core/utils/appcolors.dart';
 import 'package:sihati/core/utils/style.dart';
 import 'package:sihati/features/dashboard/widgets/detailed_tab.dart';
@@ -24,6 +26,54 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [Color(0xff2563EB), Color(0xff1D4ED8)],
+                ),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(30),
+                  bottomRight: Radius.circular(30),
+                ),
+              ),
+              child: null,
+            ),
+            ListTile(
+              leading: Icon(Icons.home),
+              title: Text('Home'.tr()),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.add_circle_outline_sharp),
+
+              title: Text('Add Product'.tr()),
+              onTap: () {
+                pushTo(context, Routes.addProduct);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('Settings'.tr()),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.logout),
+              title: Text('Logout'.tr()),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(180),
         child: Container(

@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:sihati/features/auth/presentation/pages/login_screen.dart';
 import 'package:sihati/features/auth/presentation/pages/signin_screen.dart';
 import 'package:sihati/features/dashboard/pages/dashboard_screen.dart';
+import 'package:sihati/features/products/presentation/pages/add_product_screen.dart';
 import 'package:sihati/features/splash/splash_screen.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -19,6 +20,8 @@ class Routes {
   static const String home = '/home';
   //! dashboard
   static const String dashboard = '/dashboard';
+  //! add product
+  static const String addProduct = '/addProduct';
   
 
   static final GoRouter route = GoRouter(
@@ -30,6 +33,7 @@ class Routes {
       }),
       GoRoute(path: register, builder: (context, state) =>  SigninScreen()),
       GoRoute(path: dashboard, builder: (context, state) =>  DashboardScreen()),
+      GoRoute(path: addProduct, builder: (context, state) =>  AddProductScreen()),
     ],
   );
 }
