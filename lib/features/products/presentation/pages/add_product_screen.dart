@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:sihati/core/functions/extension.dart';
 import 'package:sihati/core/utils/style.dart';
+import 'package:sihati/features/products/presentation/widgets/head.dart';
 
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({super.key});
@@ -11,6 +12,7 @@ class AddProductScreen extends StatefulWidget {
 }
 
 class _AddProductScreenState extends State<AddProductScreen> {
+  String selectedUnit = 'kg';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,15 +47,18 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 child: DecoratedBox(
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: Colors.white.withValues(alpha: 0.2),
+                    color: Colors.white.withValues(alpha: 0.15),
                   ),
                   child: Center(
-                    child: Icon(
-                      context.isArabic
-                          ? Icons.arrow_forward_ios
-                          : Icons.arrow_back_ios,
-                      color: Colors.white,
-                      size: 20,
+                    child: Transform.translate(
+                      offset: context.isArabic ? Offset(-1, 0) : Offset(4, 0),
+                      child: Icon(
+                        context.isArabic
+                            ? Icons.arrow_forward_ios
+                            : Icons.arrow_back_ios,
+                        color: Colors.white,
+                        size: 20,
+                      ),
                     ),
                   ),
                 ),
@@ -61,14 +66,9 @@ class _AddProductScreenState extends State<AddProductScreen> {
             ),
             title: Text(
               'Add Product',
-              style: Style.loginSubTitle.copyWith(
-                color: Colors.white,
-              ),
+              style: Style.loginSubTitle.copyWith(color: Colors.white),
             ),
-            subtitle: Text(
-              'Add your product details',
-              style: Style.subheader,
-            ),
+            subtitle: Text('Add your product details', style: Style.subheader),
           ),
         ),
       ),
@@ -92,22 +92,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  RichText(
-                  text:  TextSpan(
-                      children: [
-                        TextSpan(
-                          text: 'Product Name',
-                          style: Style.loginFieldLabel.copyWith(fontWeight: FontWeight.w400),
-                        ),
-                        TextSpan(
-                          text: ' *',
-                          style: Style.loginFieldLabel.copyWith(
-                            color: Colors.red,
-                          ),
-                        ),
-                      ]
-                    )
-                  ),
+                  Head(head: 'Product Name'),
                   Gap(10),
                   TextField(
                     decoration: InputDecoration(
@@ -115,12 +100,105 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       hintText: 'Enter product name',
                     ),
                   ),
-                ]
-            )
-            )
+                  Gap(20),
+                  Head(head: 'Quantity'),
+                  Gap(10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    spacing: 10,
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: 'Enter quantity',
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 60,
+                        width: 120,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade100,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.grey.shade300),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    selectedUnit = 'kg';
+                                  });
+                                },
+                                child: Container(
+                                  height: 58,
+                                  decoration: BoxDecoration(
+                                    color: selectedUnit == 'kg'
+                                        ? Colors.blue
+                                        : Colors.transparent,
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(12),
+                                      bottomLeft: Radius.circular(12),
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      'kg',
+                                      style: TextStyle(
+                                        color: selectedUnit == 'kg'
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    selectedUnit = 'box';
+                                  });
+                                },
+                              child: Container(
+                                height: 58,
+                                decoration: BoxDecoration(
+                                  color: selectedUnit == 'box'
+                                      ? Colors.blue
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(12),
+                                    bottomRight: Radius.circular(12),
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'box',
+                                    style: TextStyle(
+                                      color: selectedUnit == 'box'
+                                          ? Colors.white
+                                          : Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            )
+                          ],
+                        ),
+
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
-      )
+      ),
     );
   }
 }
