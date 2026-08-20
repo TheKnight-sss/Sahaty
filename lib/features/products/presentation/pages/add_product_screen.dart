@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:sihati/core/functions/extension.dart';
 import 'package:sihati/core/utils/style.dart';
 import 'package:sihati/features/products/presentation/widgets/head.dart';
+import 'package:sihati/features/products/presentation/widgets/price.dart';
 
 class AddProductScreen extends StatefulWidget {
   const AddProductScreen({super.key});
@@ -13,6 +14,13 @@ class AddProductScreen extends StatefulWidget {
 
 class _AddProductScreenState extends State<AddProductScreen> {
   String selectedUnit = 'kg';
+  final List<Map<String, dynamic>> colorOptions = [
+    {'name': 'Green', 'color': Colors.green},
+    {'name': 'Blue', 'color': Colors.blue},
+    {'name': 'Orange', 'color': Colors.orange},
+    {'name': 'Purple', 'color': Colors.purple},
+    {'name': 'Pink', 'color': Colors.pink},
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,6 +100,15 @@ class _AddProductScreenState extends State<AddProductScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Text(
+                    'Product Details',
+                    style: Style.loginFieldLabel.copyWith(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blueGrey,
+                    ),
+                  ),
+                  Gap(10),
                   Head(head: 'Product Name'),
                   Gap(10),
                   TextField(
@@ -163,35 +180,131 @@ class _AddProductScreenState extends State<AddProductScreen> {
                                     selectedUnit = 'box';
                                   });
                                 },
-                              child: Container(
-                                height: 58,
-                                decoration: BoxDecoration(
-                                  color: selectedUnit == 'box'
-                                      ? Colors.blue
-                                      : Colors.transparent,
-                                  borderRadius: BorderRadius.only(
-                                    topRight: Radius.circular(12),
-                                    bottomRight: Radius.circular(12),
+                                child: Container(
+                                  height: 58,
+                                  decoration: BoxDecoration(
+                                    color: selectedUnit == 'box'
+                                        ? Colors.blue
+                                        : Colors.transparent,
+                                    borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(12),
+                                      bottomRight: Radius.circular(12),
+                                    ),
                                   ),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    'box',
-                                    style: TextStyle(
-                                      color: selectedUnit == 'box'
-                                          ? Colors.white
-                                          : Colors.black,
+                                  child: Center(
+                                    child: Text(
+                                      'box',
+                                      style: TextStyle(
+                                        color: selectedUnit == 'box'
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
                                     ),
                                   ),
                                 ),
                               ),
                             ),
-                            )
                           ],
                         ),
-
                       ),
                     ],
+                  ),
+                  Gap(20),
+                  Price(selectedUnit: selectedUnit),
+                  Gap(10),
+                  TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Enter price',
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              height: 180,
+              padding: EdgeInsets.all(20),
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.1),
+                    blurRadius: 5,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Product Color',
+                    style: Style.loginFieldLabel.copyWith(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blueGrey,
+                    ),
+                  ),
+                  Gap(20),
+                  Container(
+                    height: 65,
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      itemBuilder: (BuildContext context, int index) {
+                        final colorOption = colorOptions[index];
+                        final colorName = colorOption['name'] as String;
+                        final colorValue = colorOption['color'] as Color;
+                        final isSelected = selectedUnit == colorName;
+
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedUnit = colorName;
+                            });
+                          },
+                          child: Container(
+                            width: 55,
+                            height: 65,
+                            decoration: BoxDecoration(
+                              color: colorValue.withValues(alpha: isSelected ? 0.2 : 0.1),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    width: 12,
+                                    height: 12,
+                                    decoration: BoxDecoration(
+                                      color: colorValue,
+                                      shape: BoxShape.circle,
+                                    ),
+                                  ),
+                                  Text(
+                                    colorName,
+                                    style: TextStyle(
+                                      color: colorValue,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index) =>
+                          const Gap(10),
+                      itemCount: colorOptions.length,
+                    ),
                   ),
                 ],
               ),
