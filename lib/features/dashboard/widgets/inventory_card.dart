@@ -8,8 +8,11 @@ import 'package:sihati/core/utils/style.dart';
 
 class InventoryCard extends StatelessWidget {
   const InventoryCard({
-    super.key,
+    super.key, required this.name, required this.remain, required this.color,
   });
+  final String name;
+  final double remain;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -34,19 +37,19 @@ class InventoryCard extends StatelessWidget {
               Row(
                 children: [
                   CircleAvatar(
-                    backgroundColor: Appcolors.slider.withValues(
-                      alpha: .02,
+                    backgroundColor:color.withValues(
+                      alpha: .15,
                     ),
                     child: SvgPicture.asset(
                       AppImages.logo,
                       colorFilter: ColorFilter.mode(
-                        Appcolors.splashup,
+                        color,
                         BlendMode.srcIn,
                       ),
                     ),
                   ),
                   Gap(5),
-                  Text("Vegan Mozzarella".tr(), style: Style.tab),
+                  Text(name.tr(), style: Style.tab),
                 ],
               ),
               Spacer(),
@@ -93,7 +96,7 @@ class InventoryCard extends StatelessWidget {
               Column(
                 children: [
                   Text("Remaining".tr(),style: Style.tab.copyWith(fontSize: 14,color: Appcolors.slcard),),
-                  Text("400",style: Style.tab.copyWith(color: Appcolors.slider),)
+                  Text(remain.toString(),style: Style.tab.copyWith(color: Appcolors.slider),)
                 ],
               )
             ],

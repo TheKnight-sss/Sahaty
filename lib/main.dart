@@ -6,11 +6,12 @@ import 'package:sihati/core/routes/routes.dart';
 import 'package:sihati/core/services/local/shared_pref.dart';
 import 'package:sihati/core/utils/themes.dart';
 import 'package:sihati/features/auth/presentation/cubit/authcubit.dart';
+import 'package:sihati/features/products/presentation/cubit/product_cubit.dart';
 import 'package:sihati/firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-   await SharedPref.init();
+  await SharedPref.init();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await EasyLocalization.ensureInitialized();
   // Ensure that plugin services are initialized so that `availableCameras()`
@@ -22,7 +23,10 @@ void main() async {
       path: 'assets/translations',
       fallbackLocale: const Locale('en'),
       child: MultiBlocProvider(
-        providers: [BlocProvider(create: (context) => AuthCubit())],
+        providers: [
+          BlocProvider(create: (context) => AuthCubit()),
+          BlocProvider(create: (context) => ProductCubit()),
+        ],
         child: const MyApp(),
       ),
     ),
