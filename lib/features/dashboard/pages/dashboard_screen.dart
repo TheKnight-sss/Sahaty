@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -6,14 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:sihati/core/constants/app_images.dart';
-import 'package:sihati/core/functions/dailog.dart';
-import 'package:sihati/core/functions/extension.dart';
-import 'package:sihati/core/routes/navigation.dart';
-import 'package:sihati/core/routes/routes.dart';
 import 'package:sihati/core/utils/appcolors.dart';
 import 'package:sihati/core/utils/style.dart';
-import 'package:sihati/features/dashboard/widgets/detailed_tab.dart';
+import 'package:sihati/features/dashboard/widgets/drawer_list.dart';
+import 'package:sihati/features/dashboard/widgets/head_title.dart';
 import 'package:sihati/features/dashboard/widgets/inventory_card.dart';
+import 'package:sihati/features/dashboard/widgets/order_card.dart';
 import 'package:sihati/features/dashboard/widgets/tab_button.dart';
 import 'package:sihati/features/products/presentation/cubit/product_cubit.dart';
 import 'package:sihati/features/products/presentation/cubit/product_state.dart';
@@ -63,110 +60,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xff2563EB), Color(0xff1D4ED8)],
-                ),
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
-                ),
-              ),
-              child: null,
-            ),
-            ListTile(
-              leading: Icon(Icons.home),
-              title: Text('Home'.tr()),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.add_circle_outline_sharp),
-
-              title: Text('Add Product'.tr()),
-              onTap: () {
-                pushTo(context, Routes.addProduct);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text('Settings'.tr()),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.logout),
-              title: Text('Logout'.tr()),
-              onTap: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
+        child: DrawerList(),
       ),
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(180),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Color(0xff2563EB), Color(0xff1D4ED8)],
-            ),
-
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(30),
-              bottomRight: Radius.circular(30),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: .2),
-                blurRadius: 15,
-                offset: const Offset(0, 6),
-              ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Gap(40),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Sahaty'.tr(), style: Style.header),
-                  IconButton(
-                    onPressed: () {
-                      context.setLocale(
-                        context.isArabic ? const Locale("en") : Locale("ar"),
-                      );
-                    },
-                    icon: Icon(
-                      Icons.language_outlined,
-                      color: Colors.white,
-                      size: 30,
-                    ),
-                  ),
-                ],
-              ),
-              Gap(5),
-              Text(
-                "Inventory and Orders Dashboard".tr(),
-                style: Style.subheader,
-              ),
-              Gap(8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                spacing: 10,
-                children: [DetailedTab(), DetailedTab(), DetailedTab()],
-              ),
-            ],
-          ),
-        ),
+        child: HeadTitle(),
       ),
       body: BlocBuilder<ProductCubit, ProductState>(
         builder: (context, state) {
@@ -226,44 +124,60 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   padding: EdgeInsets.all(8),
                   child: Column(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          SvgPicture.asset(
-                            AppImages.warehouse,
-                            colorFilter: ColorFilter.mode(
-                              Appcolors.splashup,
-                              BlendMode.srcIn,
+                      isSelected == inventory
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                SvgPicture.asset(
+                                  AppImages.warehouse,
+                                  colorFilter: ColorFilter.mode(
+                                    Appcolors.splashup,
+                                    BlendMode.srcIn,
+                                  ),
+                                ),
+                                Gap(5),
+
+                                Text("Inventory State".tr(), style: Style.tab),
+                              ],
+                            )
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Icon(
+                                  Icons.shopping_cart_outlined,
+                                  color: Appcolors.splashup,
+                                ),
+                                Gap(5),
+
+                                Text("All Orders".tr(), style: Style.tab),
+                              ],
                             ),
-                          ),
-                          Gap(5),
-                          Text("Inventory State".tr(), style: Style.tab),
-                        ],
-                      ),
                       const Gap(5),
                     ],
                   ),
                 ),
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: ListView.separated(
-                      itemCount: products.length,
-                      separatorBuilder: (context, index) {
-                        return Gap(10);
-                      },
-                      itemBuilder: (context, index) {
-                        final product = products[index];
+                isSelected == inventory
+                    ? Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: ListView.separated(
+                            itemCount: products.length,
+                            separatorBuilder: (context, index) {
+                              return Gap(10);
+                            },
+                            itemBuilder: (context, index) {
+                              final product = products[index];
 
-                        return InventoryCard(
-                          color: getProductColor(product.color),
-                          name: product.name ?? '',
-                          remain: product.quantity ?? 0,
-                        );
-                      },
-                    ),
-                  ),
-                ),
+                              return InventoryCard(
+                                color: getProductColor(product.color),
+                                name: product.name ?? '',
+                                remain: product.quantity ?? 0,
+                              );
+                            },
+                          ),
+                        ),
+                      )
+                    : OrderCard(),
               ],
             );
           } else if (state is ProductFailure) {
