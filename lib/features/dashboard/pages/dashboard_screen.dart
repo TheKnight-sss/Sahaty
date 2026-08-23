@@ -59,6 +59,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF9FAFB),
       drawer: Drawer(
         child: DrawerList(),
       ),
@@ -161,13 +162,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         child: Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
                           child: ListView.separated(
+                            
                             itemCount: products.length,
                             separatorBuilder: (context, index) {
                               return Gap(10);
                             },
                             itemBuilder: (context, index) {
                               final product = products[index];
-
+                                            
                               return InventoryCard(
                                 color: getProductColor(product.color),
                                 name: product.name ?? '',

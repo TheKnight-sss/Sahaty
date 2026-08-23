@@ -22,7 +22,7 @@ class InventoryCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            blurRadius: 24,
+            blurRadius: 4,
             color: Colors.black.withValues(alpha: 0.1),
             offset: Offset(0, 1),
           ),
