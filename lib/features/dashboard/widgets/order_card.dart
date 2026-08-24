@@ -1,5 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:gap/gap.dart';
+import 'package:sihati/core/constants/app_images.dart';
 import 'package:sihati/core/utils/appcolors.dart';
 import 'package:sihati/core/utils/style.dart';
 
@@ -51,6 +54,11 @@ class OrderCard extends StatelessWidget {
                   ),
                 ],
               ),
+              Row(mainAxisAlignment: MainAxisAlignment.start,children: [
+                SvgPicture.asset(AppImages.map,colorFilter: ColorFilter.mode(Colors.grey, BlendMode.srcIn),width: 15,),
+                Gap(3),
+                Text("القاهرة")
+              ],)
             ],
           ),
         ),
