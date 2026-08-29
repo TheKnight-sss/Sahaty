@@ -11,7 +11,7 @@
     "Vegan Mozzarella": "موتزريلا نباتي",
     "Natural Mozzarella": "موتزريلا طبيعي",
     "Mozzarella Cheese Mix": "موتزريلا مكس جبن",
-    "Enough": "كافٍ",
+    "Ok": "كافٍ",
     "Add Product": "إضافة منتج",
     "Add your product details": "أضف تفاصيل المنتج",
     "Product Details": "بيانات المنتج",
@@ -30,5 +30,7 @@
     "Orange": "برتقالي",
     "Purple": "بنفسجي",
     "Pink": "وردي",
-    "Add Product To Stock": "إضافة المنتج إلى المخزون"
+    "Add Product To Stock": "إضافة المنتج إلى المخزون",
+    "Cost":"السعر",
+    "Rep":"المندوب"
 }

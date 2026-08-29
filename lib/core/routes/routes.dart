@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sihati/features/auth/presentation/pages/login_screen.dart';
 import 'package:sihati/features/auth/presentation/pages/signin_screen.dart';
-import 'package:sihati/features/dashboard/pages/dashboard_screen.dart';
+import 'package:sihati/features/dashboard/presentation/pages/dashboard_screen.dart';
 import 'package:sihati/features/products/presentation/pages/add_product_screen.dart';
 import 'package:sihati/features/splash/splash_screen.dart';
 

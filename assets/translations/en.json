@@ -11,7 +11,7 @@
     "الإجمالي" : "Total",
     " في التوصيل" :"On Delivery",
     "المتبقي":"Remaining",
-    "كافٍ" : "Enough",
+    "كافٍ" : "ok",
     "إضافة منتج": "Add Product",
   "أضف تفاصيل المنتج": "Add your product details",
   "بيانات المنتج": "Product Details",
@@ -30,5 +30,7 @@
   "برتقالي": "Orange",
   "بنفسجي": "Purple",
   "وردي": "Pink",
-  "إضافة المنتج إلى المخزون": "Add Product To Stock"
+  "إضافة المنتج إلى المخزون": "Add Product To Stock",
+  "السعر":"Cost",
+  "المندوب":"Rep"
 }

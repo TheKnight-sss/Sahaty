@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:sihati/core/functions/extension.dart';
 import 'package:sihati/core/utils/style.dart';
-import 'package:sihati/features/dashboard/widgets/detailed_tab.dart';
+import 'package:sihati/features/dashboard/presentation/widgets/detailed_tab.dart';
 
 class HeadTitle extends StatelessWidget {
   const HeadTitle({

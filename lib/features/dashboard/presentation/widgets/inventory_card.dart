@@ -58,12 +58,12 @@ class InventoryCard extends StatelessWidget {
                 width: 60,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(50),
-                  color: Appcolors.signinbg.withValues(alpha: .3),
+                  color: Appcolors.slider.withValues(alpha: .15),
                 ),
                 child: Center(
                   child: Text(
-                    "Enough".tr(),
-                    style: TextStyle(color: Appcolors.signinbg),
+                    "Ok".tr(),
+                    style: TextStyle(color: Appcolors.slider,fontWeight:FontWeight.w700 ),
                   ),
                 ),
               ),
