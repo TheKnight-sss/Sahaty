@@ -56,12 +56,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     context.locale;
-    print("Dashboard rebuilt: ${context.locale}");
-
     return Scaffold(
       backgroundColor: const Color(0xFFF9FAFB),
 
-      drawer: Drawer(child: DrawerList()),
+      drawer: Drawer(backgroundColor: Colors.white, child: DrawerList()),
 
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(180),

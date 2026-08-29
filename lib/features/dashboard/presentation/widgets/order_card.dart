@@ -34,7 +34,7 @@ class OrderCard extends StatelessWidget {
               children: [
                 Text("El Asel", style: Style.tab),
                 Spacer(),
-                Notes(),
+                Notes(text:"Done",select: false,),
               ],
             ),
             Row(
@@ -94,7 +94,11 @@ class OrderCard extends StatelessWidget {
                       Text("Rep".tr(),style: TextStyle(color: Colors.black.withValues(alpha: .7)),),
                       Gap(5),
                       Text(":"),
-                      Text("")
+                      Gap(5),
+                      Text("محمد أحمد"),
+                      Spacer(),
+                      Notes(text:"تم تأكيد الإستلام".tr(),select: true,)
+
                     ],
                   ),
                 ],

@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:sihati/core/functions/extension.dart';
 import 'package:sihati/core/utils/style.dart';
 
-class AddProductTitle extends StatelessWidget {
-  const AddProductTitle({
-    super.key,
-  });
+class AddBar extends StatelessWidget {
+  const AddBar({super.key, required this.title, required this.subtitle});
+  final String title;
+  final String subtitle;
 
   @override
   Widget build(BuildContext context) {
@@ -39,13 +39,10 @@ class AddProductTitle extends StatelessWidget {
         ),
       ),
       title: Text(
-        'Add Product'.tr(),
+        title.tr(),
         style: Style.loginSubTitle.copyWith(color: Colors.white),
       ),
-      subtitle: Text(
-        'Add your product details'.tr(),
-        style: Style.subheader,
-      ),
+      subtitle: Text(subtitle.tr(), style: Style.subheader),
     );
   }
 }

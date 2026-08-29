@@ -53,7 +53,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
               bottomRight: Radius.circular(30),
             ),
           ),
-          child: AddProductTitle(),
+          child: AddBar(title: "Add Product",subtitle: "Add Your Product Details",),
         ),
       ),
       body: BlocListener<ProductCubit, ProductState>(

@@ -14,12 +14,29 @@ class ProductCubit extends Cubit<ProductState> {
   final formkey = GlobalKey<FormState>();
 
   Future<void> addProduct({required String unit, required String color}) async {
-    if (!(formkey.currentState?.validate() ?? false)) return;
+    if (!formkey.currentState!.validate()) {
+      return;
+    }
 
     try {
+
+      final productName = productnameController.text.trim();
+
+    // Check if product already exists
+    final existingProduct = await FirebaseFirestore.instance
+        .collection("Products")
+        .where("name", isEqualTo: productName)
+        .limit(1)
+        .get();
+
+    if (existingProduct.docs.isNotEmpty) {
+      emit(ProductFailure("Product already exists"));
+      return;
+    }
+
       productmodel = ProductModel(
         id: "",
-        name: productnameController.text,
+        name: productName,
         price: double.tryParse(priceController.text),
         quantity: double.tryParse(quantityController.text),
         unit: unit,
