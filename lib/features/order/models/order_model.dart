@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:sihati/features/order/models/order_item_model.dart';
 import 'package:sihati/features/products/models/product_model.dart';
 
 enum OrderStatus { pending, onDelivery, delivered }
@@ -8,7 +9,7 @@ class OrderModel {
   final String? location;
   final double? cost;
   final String? rep;
-  final List<ProductModel>? orderlist;
+  final List<OrderItemModel>? orderlist;
   final Timestamp? createdAt;
   final OrderStatus status;
 
@@ -29,7 +30,7 @@ class OrderModel {
       cost: (json['cost'] as num?)?.toDouble(),
       rep: json['rep'],
       orderlist: (json['orderlist'] as List?)
-          ?.map((item) => ProductModel.fromJson(item))
+          ?.map((item) => OrderItemModel.fromjson(item))
           .toList(),
       createdAt: json['createdAt'],
       status: OrderStatus.values.firstWhere(

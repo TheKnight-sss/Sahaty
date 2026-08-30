@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sihati/features/order/models/order_item_model.dart';
 import 'package:sihati/features/order/models/order_model.dart';
 import 'package:sihati/features/order/presentation/cubit/order_state.dart';
 import 'package:sihati/features/products/models/product_model.dart';
@@ -8,7 +9,7 @@ import 'package:sihati/features/products/models/product_model.dart';
 class OrderCubit extends Cubit<OrderState> {
   OrderCubit() : super(OrderLoading());
 
-  List<OrderModel> orderitems = [];
+  List<OrderItemModel> selectedOrderItems = [];
   OrderModel? orderModel;
   final buyercontroller = TextEditingController();
   final locationcontroller = TextEditingController();
@@ -16,29 +17,51 @@ class OrderCubit extends Cubit<OrderState> {
   final repcontroller = TextEditingController();
   final formkey = GlobalKey<FormState>();
 
-  Future<void> addOrder() async {
+  void addProductToOrder(ProductModel product, double quantity) {
+    final orderItem = OrderItemModel(
+      name: product.name,
+      unit: product.unit,
+      price: product.price,
+      quantity: quantity,
+    );
+    selectedOrderItems.add(orderItem);
+
+    emit(OrderItemsUpdated());
+  }
+
+  void removeProductFromOrder(int index) {
+    selectedOrderItems.removeAt(index);
+
+    emit(OrderItemsUpdated());
+  }
+
+  Future<void> addOrder(ProductModel product, double quantity) async {
     if (!formkey.currentState!.validate()) {
       return;
     }
 
+    if (selectedOrderItems.isEmpty) {
+      emit(OrderFailure("Please add at least one product"));
+      return;
+    }
+
     try {
+      emit(OrderLoading());
       final buyername = buyercontroller.text;
 
       final existingOrder = await FirebaseFirestore.instance
           .collection("Orders")
           .where("buyer", isEqualTo: buyername)
-          .where("status",isEqualTo: OrderStatus.pending.name)
+          .where("status", isEqualTo: OrderStatus.pending.name)
           .get();
 
-          if (existingOrder.docs.isNotEmpty) {
-      // Existing pending order
-      final doc = existingOrder.docs.first;
+      if (existingOrder.docs.isNotEmpty) {
+        // Existing pending order
+        emit(OrderFailure("This buyer already has a pending order"));
 
-      print("Pending order already exists: ${doc.id}");
-
-      // Do something with this order
-      return;
-    }
+        // Do something with this order
+        return;
+      }
 
       emit(OrderLoading());
       orderModel = OrderModel(
@@ -46,23 +69,21 @@ class OrderCubit extends Cubit<OrderState> {
         location: locationcontroller.text,
         cost: double.tryParse(costcontroller.text),
         rep: repcontroller.text,
-        orderlist: orderitems,
+        orderlist: selectedOrderItems,
         status: OrderStatus.pending,
       );
 
-      orderitems.add(
-        OrderModel(
-          buyer: buyername,
-          location: locationcontroller.text
-        )
-      );
 
-      final doc = await FirebaseFirestore.instance
-        .collection("Orders")
-        .add({
-          ...orderModel!.toJson(),
-          'createdAt': FieldValue.serverTimestamp(),
-        });
-    } catch (e) {}
+      await FirebaseFirestore.instance
+          .collection("Orders")
+          .add({
+        ...orderModel!.toJson(),
+        "createdAt": FieldValue.serverTimestamp(),
+      });
+
+      emit(OrderSuccess());
+    } catch (e) {
+      emit(OrderFailure(e.toString()));
+    }
   }
 }
