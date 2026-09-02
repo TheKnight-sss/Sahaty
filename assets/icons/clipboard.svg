@@ -1,0 +1,12 @@
+<svg width="43" height="74" viewBox="0 0 43 74" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g stroke="#0B8F55" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Clipboard body -->
+    <rect x="10.5" y="22.5" width="22" height="26" rx="2.5"/>
+    <!-- Top clip -->
+    <path d="M17 22.5V20.8C17 19.25 18.25 18 19.8 18H23.2C24.75 18 26 19.25 26 20.8V22.5"/>
+    <path d="M17 22.5H26"/>
+    <!-- Text lines -->
+    <path d="M16.5 31.5H25.5"/>
+    <path d="M16.5 38.5H23"/>
+  </g>
+</svg>
