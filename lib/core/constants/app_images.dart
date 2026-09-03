@@ -6,4 +6,5 @@ class AppImages {
   static const String check = 'assets/icons/circle-check-big.svg';    
   static const String clipboard = 'assets/icons/clipboard.svg';    
   static const String cart = 'assets/icons/cart.svg';    
+  static const String wallet = 'assets/icons/wallet.png';    
 }
