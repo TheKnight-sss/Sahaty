@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sihati/core/constants/app_images.dart';
+import 'package:sihati/components/buttons/custom_button.dart';
 import 'package:sihati/core/functions/dailog.dart';
 import 'package:sihati/core/routes/navigation.dart';
-import 'package:sihati/core/utils/style.dart';
 import 'package:sihati/features/order/presentation/cubit/order_cubit.dart';
 import 'package:sihati/features/order/presentation/cubit/order_state.dart';
 import 'package:sihati/features/order/presentation/widgets/order_information_card.dart';
 import 'package:sihati/features/order/presentation/widgets/order_item.dart';
+import 'package:sihati/features/order/presentation/widgets/order_summary.dart';
 import 'package:sihati/features/products/presentation/widgets/add_product_title.dart';
 
 class AddOrderScreen extends StatelessWidget {
@@ -15,6 +15,7 @@ class AddOrderScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var cubit = context.read<OrderCubit>();
     return Scaffold(
       backgroundColor: const Color(0xFFF9FAFB),
       appBar: PreferredSize(
@@ -57,40 +58,37 @@ class AddOrderScreen extends StatelessWidget {
           }
         },
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              OrderInformationCard(),
-              OrderItem(),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.1),
-                        blurRadius: 5,
-                        offset: Offset(0, 2),
-                      ),
-                    ],
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Image.asset(AppImages.wallet, width: 45, height: 45),
-                          Text("Order Summary", style: Style.loginFieldLabel)
-                        ],
-                      ),                      
-                    ],
+          child: Form(
+            key: cubit.formkey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                OrderInformationCard(),
+                OrderItem(),
+                OrderSummary(),
+                CustomButton(
+                  onPressed: () {
+                    cubit.addOrder(
+                      context,
+                      cubit.buyercontroller.text,
+                      cubit.locationcontroller.text,
+                      cubit.repcontroller.text,
+                    );
+                  },
+                  color1: Color(0xff2563EB),
+                  color2: Color(0xff1D4ED8),
+                  color3: Color(0xff1E40AF),
+                  child: Text(
+                    "Add Order",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

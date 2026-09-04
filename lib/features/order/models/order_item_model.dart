@@ -2,7 +2,7 @@ class OrderItemModel {
 
   final String? name;
   final String? unit;
-  final double? quantity;
+  final double? quantity ;
   final double? price;
 
   OrderItemModel({this.name, this.unit, this.quantity, this.price});

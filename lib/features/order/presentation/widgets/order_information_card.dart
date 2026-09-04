@@ -1,18 +1,21 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:sihati/core/constants/app_images.dart';
 import 'package:sihati/core/utils/style.dart';
+import 'package:sihati/features/order/presentation/cubit/order_cubit.dart';
 import 'package:sihati/features/order/presentation/widgets/head_list.dart';
 
 class OrderInformationCard extends StatelessWidget {
-  const OrderInformationCard({
+   const OrderInformationCard({
     super.key,
   });
 
   @override
   Widget build(BuildContext context) {
+    var cubit = context.read<OrderCubit>();
     return Padding(
       padding: const EdgeInsets.all(20.0),
       child: Container(
@@ -55,18 +58,21 @@ class OrderInformationCard extends StatelessWidget {
               head: "Buyer",
               hintText: 'Enter Buyer Name'.tr(),
               prefixIcon: Icon(Icons.person_outline_sharp),
+              controller: cubit.buyercontroller,
             ),
             Gap(15),
             HeadList(
               head: 'Location',
               hintText: 'Enter Location'.tr(),
               prefixIcon: Icon(Icons.location_on_outlined),
+              controller: cubit.locationcontroller,
             ),
             Gap(15),
             HeadList(
               head: 'Representative',
               hintText: 'Enter Representative Name'.tr(),
               prefixIcon: Icon(Icons.person_outline_sharp),
+              controller: cubit.repcontroller,
             ),
           ],
         ),

@@ -1,10 +1,15 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:sihati/core/constants/app_images.dart';
+import 'package:sihati/core/routes/navigation.dart';
+import 'package:sihati/core/routes/routes.dart';
 import 'package:sihati/core/utils/appcolors.dart';
 import 'package:sihati/core/utils/style.dart';
+import 'package:sihati/features/order/presentation/cubit/order_cubit.dart';
+import 'package:sihati/features/products/presentation/pages/select_product_screen.dart';
 
 class OrderItem extends StatelessWidget {
   const OrderItem({
@@ -13,6 +18,7 @@ class OrderItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var cubit = context.read<OrderCubit>();
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Container(
@@ -50,7 +56,9 @@ class OrderItem extends StatelessWidget {
                 ),
                 Spacer(),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    pushTo(context, Routes.selectProduct);
+                  },
                   icon: Icon(
                     Icons.add_circle_outline,
                     color: Appcolors.signinbg,

@@ -35,7 +35,7 @@ class OrderCubit extends Cubit<OrderState> {
     emit(OrderItemsUpdated());
   }
 
-  Future<void> addOrder(ProductModel product, double quantity) async {
+  Future<void> addOrder(BuildContext context, String buyer, String location, String rep) async {
     if (!formkey.currentState!.validate()) {
       return;
     }

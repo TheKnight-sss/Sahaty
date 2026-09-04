@@ -5,6 +5,7 @@ import 'package:sihati/features/auth/presentation/pages/signin_screen.dart';
 import 'package:sihati/features/dashboard/presentation/pages/dashboard_screen.dart';
 import 'package:sihati/features/order/presentation/pages/addorder_screen.dart';
 import 'package:sihati/features/products/presentation/pages/add_product_screen.dart';
+import 'package:sihati/features/products/presentation/pages/select_product_screen.dart';
 import 'package:sihati/features/splash/splash_screen.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -25,6 +26,8 @@ class Routes {
   static const String addProduct = '/addProduct';
   //! add order
   static const String addorder = '/addorder';
+  //! select product
+  static const String selectProduct = '/selectProduct';
   
 
   static final GoRouter route = GoRouter(
@@ -37,7 +40,8 @@ class Routes {
       GoRoute(path: register, builder: (context, state) =>  SigninScreen()),
       GoRoute(path: dashboard, builder: (context, state) =>  DashboardScreen()),
       GoRoute(path: addProduct, builder: (context, state) =>  AddProductScreen()),
-      GoRoute(path: addorder,builder: (context, state) => AddOrderScreen())
+      GoRoute(path: addorder,builder: (context, state) => AddOrderScreen()),
+      GoRoute(path: selectProduct, builder: (context, state) =>  SelectProductScreen())
     ],
   );
 }

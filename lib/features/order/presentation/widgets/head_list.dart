@@ -3,12 +3,13 @@ import 'package:gap/gap.dart';
 import 'package:sihati/features/products/presentation/widgets/head.dart';
 
 class HeadList extends StatelessWidget {
-  const HeadList({
-    super.key, required this.head, required this.hintText, this.prefixIcon,
+   const HeadList({
+    super.key, required this.head, required this.hintText, this.prefixIcon,required this.controller,
   });
   final String head;
   final String hintText;
   final Widget? prefixIcon;
+  final TextEditingController controller ;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +24,7 @@ class HeadList extends StatelessWidget {
             hintText: hintText,
             prefixIcon: prefixIcon,
           ),
+          controller: controller,
         ),
       ],
     );
