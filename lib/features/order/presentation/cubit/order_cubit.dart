@@ -17,17 +17,25 @@ class OrderCubit extends Cubit<OrderState> {
   final repcontroller = TextEditingController();
   final formkey = GlobalKey<FormState>();
 
-  void addProductToOrder(ProductModel product, double quantity) {
-    final orderItem = OrderItemModel(
-      name: product.name,
-      unit: product.unit,
-      price: product.price,
-      quantity: quantity,
-    );
-    selectedOrderItems.add(orderItem);
+  void addProductToOrder(ProductModel product) {
+  final index = selectedOrderItems.indexWhere(
+    (item) => item.name == product.name,
+  );
 
-    emit(OrderItemsUpdated());
-  }
+  if (index == -1) {
+
+    selectedOrderItems.add(
+      OrderItemModel(
+        name: product.name,
+        unit: product.unit,
+        price: product.price,
+        quantity:0,
+      )
+    );
+  } 
+
+  emit(OrderItemsUpdated());
+}
 
   void removeProductFromOrder(int index) {
     selectedOrderItems.removeAt(index);

@@ -63,8 +63,11 @@ class AddOrderScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                //!part1
                 OrderInformationCard(),
+                //!part2
                 OrderItem(),
+                //!part3
                 OrderSummary(),
                 CustomButton(
                   onPressed: () {

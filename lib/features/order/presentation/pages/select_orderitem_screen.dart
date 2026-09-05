@@ -3,13 +3,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:sihati/core/constants/app_images.dart';
+import 'package:sihati/core/routes/navigation.dart';
 import 'package:sihati/core/utils/style.dart';
 import 'package:sihati/features/order/presentation/cubit/order_cubit.dart';
 import 'package:sihati/features/products/presentation/cubit/product_cubit.dart';
 import 'package:sihati/features/products/presentation/cubit/product_state.dart';
 
-class SelectProductScreen extends StatelessWidget {
-  const SelectProductScreen({super.key});
+class SelectOrderItemScreen extends StatelessWidget {
+  const SelectOrderItemScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +26,7 @@ class SelectProductScreen extends StatelessWidget {
     };
 
     return Scaffold(
-      appBar: AppBar(title: Text('Select Product')),
+      appBar: AppBar(title: Text('Select Order Item')),
       body: BlocBuilder<ProductCubit, ProductState>(
         builder: (context, state) {
           if (state is ProductSuccess) {
@@ -39,7 +40,8 @@ class SelectProductScreen extends StatelessWidget {
                 var product = cubit.products[index];
                 return GestureDetector(
                   onTap: () {
-                    orderCubit.addProductToOrder(product, 100); 
+                    orderCubit.addProductToOrder(product); 
+                    pop(context);
                   },
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -78,9 +80,9 @@ class SelectProductScreen extends StatelessWidget {
                               ),
                             ),
                           ),
-                          Text('${product.name}', style: Style.loginFieldLabel),
+                          Text(product.name ?? '', style: Style.loginFieldLabel),
                           Text(
-                            '\$${product.price}',
+                            '${product.price} L.E',
                             style: Style.loginSubTitle,
                           ),
                         ],
