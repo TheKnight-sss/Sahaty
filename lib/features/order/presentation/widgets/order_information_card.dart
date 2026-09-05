@@ -6,7 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:sihati/core/constants/app_images.dart';
 import 'package:sihati/core/utils/style.dart';
 import 'package:sihati/features/order/presentation/cubit/order_cubit.dart';
-import 'package:sihati/features/order/presentation/widgets/head_list.dart';
+import 'package:sihati/features/order/presentation/widgets/order_field.dart';
 
 class OrderInformationCard extends StatelessWidget {
    const OrderInformationCard({
@@ -54,21 +54,21 @@ class OrderInformationCard extends StatelessWidget {
               ],
             ),
             Gap(10),
-            HeadList(
+            OrderField(
               head: "Buyer",
               hintText: 'Enter Buyer Name'.tr(),
               prefixIcon: Icon(Icons.person_outline_sharp),
               controller: cubit.buyercontroller,
             ),
             Gap(15),
-            HeadList(
+            OrderField(
               head: 'Location',
               hintText: 'Enter Location'.tr(),
               prefixIcon: Icon(Icons.location_on_outlined),
               controller: cubit.locationcontroller,
             ),
             Gap(15),
-            HeadList(
+            OrderField(
               head: 'Representative',
               hintText: 'Enter Representative Name'.tr(),
               prefixIcon: Icon(Icons.person_outline_sharp),

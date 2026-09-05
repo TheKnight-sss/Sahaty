@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sihati/features/order/models/order_item_model.dart';
-import 'package:sihati/features/products/models/product_model.dart';
 
 enum OrderStatus { pending, onDelivery, delivered }
 

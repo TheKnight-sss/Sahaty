@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:sihati/features/products/presentation/widgets/head.dart';
 
-class HeadList extends StatelessWidget {
-   const HeadList({
+class OrderField extends StatelessWidget {
+   const OrderField({
     super.key, required this.head, required this.hintText, this.prefixIcon,required this.controller,
   });
   final String head;
