@@ -11,7 +11,6 @@ import 'package:sihati/core/utils/style.dart';
 import 'package:sihati/features/order/presentation/cubit/order_cubit.dart';
 import 'package:sihati/features/order/presentation/cubit/order_state.dart';
 import 'package:sihati/features/order/presentation/widgets/order_item_card.dart';
-import 'package:sihati/features/products/presentation/cubit/product_cubit.dart';
 
 class OrderItem extends StatelessWidget {
   const OrderItem({super.key});
@@ -36,8 +35,6 @@ class OrderItem extends StatelessWidget {
         child: BlocBuilder<OrderCubit, OrderState>(
           builder: (context, state) {
             var cubit = context.read<OrderCubit>();
-            var productcubit = context.read<ProductCubit>();
-            var prodi = productcubit.products;
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

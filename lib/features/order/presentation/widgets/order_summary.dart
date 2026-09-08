@@ -40,7 +40,6 @@ class OrderSummary extends StatelessWidget {
             Gap(10),
             BlocBuilder<OrderCubit, OrderState>(
               builder: (context, state) {
-                final orderCubit = context.read<OrderCubit>();
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
