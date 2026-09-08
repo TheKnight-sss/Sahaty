@@ -36,6 +36,8 @@ class OrderItem extends StatelessWidget {
         child: BlocBuilder<OrderCubit, OrderState>(
           builder: (context, state) {
             var cubit = context.read<OrderCubit>();
+            var productcubit = context.read<ProductCubit>();
+            var prodi = productcubit.products;
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

@@ -12,6 +12,7 @@ class OrderItemCard extends StatefulWidget {
     this.orderproductquantity,
     this.orderproductunit,
   });
+
   final String orderproductname;
   final double? orderproductprice;
   final double? orderproductquantity;
@@ -23,13 +24,6 @@ class OrderItemCard extends StatefulWidget {
 
 class _OrderItemCardState extends State<OrderItemCard> {
   late final TextEditingController orderproductquantitycontroller;
-  final colors = {
-    'Green': Colors.green,
-    'Blue': Colors.blue,
-    'Orange': Colors.orange,
-    'Purple': Colors.purple,
-    'Pink': Colors.pink,
-  };
 
   @override
   void initState() {
@@ -48,11 +42,13 @@ class _OrderItemCardState extends State<OrderItemCard> {
 
   @override
   Widget build(BuildContext context) {
-    final qunatity = double.tryParse(orderproductquantitycontroller.text) ?? 0;
+    final quantity =
+        double.tryParse(orderproductquantitycontroller.text) ?? 0;
 
-    final totalprice = (widget.orderproductprice ?? 0) * qunatity;
+    final totalprice = (widget.orderproductprice ?? 0) * quantity;
+
     return Container(
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Colors.grey[100],
         borderRadius: BorderRadius.circular(10),
@@ -72,11 +68,16 @@ class _OrderItemCardState extends State<OrderItemCard> {
                 AppImages.logo,
                 width: 40,
                 height: 40,
-                colorFilter: ColorFilter.mode(Colors.black, BlendMode.srcIn),
+                colorFilter: ColorFilter.mode(
+                  Colors.black,
+                  BlendMode.srcIn,
+                ),
               ),
             ),
           ),
-          Gap(10),
+
+          const Gap(10),
+
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -89,6 +90,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
                     color: Colors.black,
                   ),
                 ),
+
                 Text(
                   "Price: $totalprice",
                   style: Style.loginFieldLabel.copyWith(
@@ -100,6 +102,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
               ],
             ),
           ),
+
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -111,14 +114,15 @@ class _OrderItemCardState extends State<OrderItemCard> {
                   color: Colors.black,
                 ),
               ),
+
               SizedBox(
                 width: 100,
                 height: 35,
                 child: TextField(
-                  decoration: InputDecoration(
-                    hintText:
-                        (widget.orderproductquantity?.toString() ??
-                        'Enter quantity'),
+                  controller: orderproductquantitycontroller,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    hintText: 'Enter quantity',
                     border: OutlineInputBorder(),
                     contentPadding: EdgeInsets.symmetric(
                       horizontal: 10,
@@ -128,13 +132,13 @@ class _OrderItemCardState extends State<OrderItemCard> {
                   onChanged: (value) {
                     setState(() {});
                   },
-                  controller: orderproductquantitycontroller,
-                  keyboardType: TextInputType.number,
                 ),
               ),
             ],
           ),
-          Gap(10),
+
+          const Gap(10),
+
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
@@ -142,7 +146,10 @@ class _OrderItemCardState extends State<OrderItemCard> {
             ),
             child: IconButton(
               onPressed: () {},
-              icon: Icon(Icons.delete_outline_rounded, color: Colors.red),
+              icon: const Icon(
+                Icons.delete_outline_rounded,
+                color: Colors.red,
+              ),
             ),
           ),
         ],
