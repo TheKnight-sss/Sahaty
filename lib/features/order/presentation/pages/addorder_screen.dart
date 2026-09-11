@@ -5,8 +5,8 @@ import 'package:sihati/core/functions/dailog.dart';
 import 'package:sihati/core/routes/navigation.dart';
 import 'package:sihati/features/order/presentation/cubit/order_cubit.dart';
 import 'package:sihati/features/order/presentation/cubit/order_state.dart';
+import 'package:sihati/features/order/presentation/widgets/order_item_list.dart';
 import 'package:sihati/features/order/presentation/widgets/order_information_card.dart';
-import 'package:sihati/features/order/presentation/widgets/order_item.dart';
 import 'package:sihati/features/order/presentation/widgets/order_summary.dart';
 import 'package:sihati/features/products/presentation/widgets/add_product_title.dart';
 
@@ -66,17 +66,15 @@ class AddOrderScreen extends StatelessWidget {
                 //!part1
                 OrderInformationCard(),
                 //!part2
-                OrderItem(),
+                OrderItemList(),
                 //!part3
                 OrderSummary(),
                 CustomButton(
                   onPressed: () {
                     cubit.addOrder(
-                      context,
-                      cubit.buyercontroller.text,
-                      cubit.locationcontroller.text,
-                      cubit.repcontroller.text,
+                      
                     );
+                    pop(context);
                   },
                   color1: Color(0xff2563EB),
                   color2: Color(0xff1D4ED8),

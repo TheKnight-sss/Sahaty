@@ -12,11 +12,19 @@ import 'package:sihati/features/order/presentation/cubit/order_cubit.dart';
 import 'package:sihati/features/order/presentation/cubit/order_state.dart';
 import 'package:sihati/features/order/presentation/widgets/order_item_card.dart';
 
-class OrderItem extends StatelessWidget {
-  const OrderItem({super.key});
+class OrderItemList extends StatelessWidget {
+  const OrderItemList({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final colors = {
+      'Green': Colors.green,
+      'Blue': Colors.blue,
+      'Orange': Colors.orange,
+      'Purple': Colors.purple,
+      'Pink': Colors.pink,
+    };
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20.0),
       child: Container(
@@ -71,10 +79,15 @@ class OrderItem extends StatelessWidget {
                         itemBuilder: (context, index) {
                           final order = cubit.selectedOrderItems[index];
                           return OrderItemCard(
+                            index: index,
                             orderproductname: order.name ?? '',
                             orderproductquantity: order.quantity ?? 0,
                             orderproductprice: order.price??0,
                             orderproductunit: order.unit ?? '',
+                            productcolor: colors[order.color]!,
+                            onpressed: () {
+                              cubit.removeProductFromOrder(index);
+                            },
                           );
                         },
                         separatorBuilder: (context, index) {

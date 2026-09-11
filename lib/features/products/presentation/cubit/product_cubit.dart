@@ -38,7 +38,7 @@ class ProductCubit extends Cubit<ProductState> {
         id: "",
         name: productName,
         price: double.tryParse(priceController.text),
-        quantity: double.tryParse(quantityController.text),
+        maxquan: double.tryParse(quantityController.text),
         unit: unit,
         color: color,
       );
@@ -52,7 +52,7 @@ class ProductCubit extends Cubit<ProductState> {
           id: doc.id,
           name: productmodel!.name,
           price: productmodel!.price,
-          quantity: productmodel!.quantity,
+          maxquan: productmodel!.maxquan,
           unit: productmodel!.unit,
           color: productmodel!.color,
         ),

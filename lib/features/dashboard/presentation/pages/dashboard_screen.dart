@@ -207,7 +207,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               return InventoryCard(
                                 color: getProductColor(product.color),
                                 name: product.name ?? '',
-                                remain: product.quantity ?? 0,
+                                remain: product.maxquan ?? 0,
                               );
                             },
                           ),

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:sihati/core/constants/app_images.dart';
 import 'package:sihati/core/utils/style.dart';
+import 'package:sihati/features/order/presentation/cubit/order_cubit.dart';
 
 class OrderItemCard extends StatefulWidget {
   const OrderItemCard({
@@ -11,12 +13,18 @@ class OrderItemCard extends StatefulWidget {
     this.orderproductprice,
     this.orderproductquantity,
     this.orderproductunit,
+    required this.productcolor,
+    required this.onpressed,
+    required this.index,
   });
 
   final String orderproductname;
+  final int index;
   final double? orderproductprice;
   final double? orderproductquantity;
   final String? orderproductunit;
+  final Color productcolor;
+  final VoidCallback onpressed;
 
   @override
   State<OrderItemCard> createState() => _OrderItemCardState();
@@ -42,8 +50,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
 
   @override
   Widget build(BuildContext context) {
-    final quantity =
-        double.tryParse(orderproductquantitycontroller.text) ?? 0;
+    final quantity = double.tryParse(orderproductquantitycontroller.text) ?? 0;
 
     final totalprice = (widget.orderproductprice ?? 0) * quantity;
 
@@ -69,7 +76,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
                 width: 40,
                 height: 40,
                 colorFilter: ColorFilter.mode(
-                  Colors.black,
+                  widget.productcolor,
                   BlendMode.srcIn,
                 ),
               ),
@@ -130,6 +137,13 @@ class _OrderItemCardState extends State<OrderItemCard> {
                     ),
                   ),
                   onChanged: (value) {
+                    final quantity = double.tryParse(value) ?? 0;
+
+                    context.read<OrderCubit>().updateProductQuantity(
+                      widget.index,
+                      quantity,
+                    );
+
                     setState(() {});
                   },
                 ),
@@ -145,11 +159,8 @@ class _OrderItemCardState extends State<OrderItemCard> {
               borderRadius: BorderRadius.circular(10),
             ),
             child: IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.delete_outline_rounded,
-                color: Colors.red,
-              ),
+              onPressed: widget.onpressed,
+              icon: const Icon(Icons.delete_outline_rounded, color: Colors.red),
             ),
           ),
         ],

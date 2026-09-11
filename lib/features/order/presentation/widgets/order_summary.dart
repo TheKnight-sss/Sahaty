@@ -7,9 +7,7 @@ import 'package:sihati/features/order/presentation/cubit/order_cubit.dart';
 import 'package:sihati/features/order/presentation/cubit/order_state.dart';
 
 class OrderSummary extends StatelessWidget {
-  const OrderSummary({
-    super.key,
-  });
+  const OrderSummary({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,27 +32,25 @@ class OrderSummary extends StatelessWidget {
             Row(
               children: [
                 Image.asset(AppImages.wallet, width: 45, height: 45),
-                Text("Order Summary", style: Style.loginFieldLabel)
+                Text("Order Summary", style: Style.loginFieldLabel),
               ],
-            ), 
+            ),
             Gap(10),
             BlocBuilder<OrderCubit, OrderState>(
               builder: (context, state) {
+                var cubit = context.read<OrderCubit>();
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Total Items: ",style: Style.loginFieldLabel,
-                      
+                      "Total Items: ${cubit.selectedOrderItems.length} ",
+                      style: Style.loginFieldLabel,
                     ),
-                    Text(
-                      "Total Price: ",style: Style.loginFieldLabel,
-                      
-                    ),
+                    Text("Total Price: ${cubit.updateOrderTotalPrice()} ", style: Style.loginFieldLabel),
                   ],
                 );
               },
-            ),                  
+            ),
           ],
         ),
       ),

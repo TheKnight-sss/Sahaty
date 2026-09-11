@@ -4,6 +4,7 @@ import 'package:sihati/features/order/models/order_item_model.dart';
 enum OrderStatus { pending, onDelivery, delivered }
 
 class OrderModel {
+  final String? id;
   final String? buyer;
   final String? location;
   final double? cost;
@@ -13,6 +14,7 @@ class OrderModel {
   final OrderStatus status;
 
   OrderModel({
+    this.id,
     this.buyer,
     this.location,
     this.cost,
@@ -24,6 +26,7 @@ class OrderModel {
 
   factory OrderModel.fromJson(Map<String, dynamic> json) {
     return OrderModel(
+      id: json['id'],
       buyer: json['buyer'],
       location: json['location'],
       cost: (json['cost'] as num?)?.toDouble(),
@@ -41,6 +44,7 @@ class OrderModel {
 
   Map<String, dynamic> toJson() {
     return {
+      'id':id,
       'buyer': buyer,
       'location': location,
       'cost': cost,

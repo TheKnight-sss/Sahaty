@@ -10,32 +10,56 @@ class OrderCubit extends Cubit<OrderState> {
   OrderCubit() : super(OrderLoading());
 
   List<OrderItemModel> selectedOrderItems = [];
+  List<OrderModel> orderList = [];
   OrderModel? orderModel;
   final buyercontroller = TextEditingController();
   final locationcontroller = TextEditingController();
-  final costcontroller = TextEditingController();
   final repcontroller = TextEditingController();
   final formkey = GlobalKey<FormState>();
 
   void addProductToOrder(ProductModel product) {
-  final index = selectedOrderItems.indexWhere(
-    (item) => item.name == product.name,
-  );
-
-  if (index == -1) {
-
-    selectedOrderItems.add(
-      OrderItemModel(
-        name: product.name,
-        unit: product.unit,
-        price: product.price,
-        quantity:0,
-      )
+    final index = selectedOrderItems.indexWhere(
+      (item) => item.name == product.name,
     );
-  } 
 
-  emit(OrderItemsUpdated());
-}
+    if (index == -1) {
+      selectedOrderItems.add(
+        OrderItemModel(
+          name: product.name,
+          unit: product.unit,
+          price: product.price,
+          quantity: 0,
+          color: product.color,
+        ),
+      );
+    }
+
+    emit(OrderItemsUpdated());
+  }
+
+  void updateProductQuantity(int index, double quantity) {
+    final item = selectedOrderItems[index];
+
+    selectedOrderItems[index] = OrderItemModel(
+      name: item.name,
+      unit: item.unit,
+      price: item.price,
+      quantity: quantity,
+      color: item.color,
+    );
+
+    emit(OrderItemsUpdated());
+  }
+
+  double updateOrderTotalPrice() {
+    double totalPrice = 0;
+
+    for (final item in selectedOrderItems) {
+      totalPrice += (item.price ?? 0) * (item.quantity ?? 0);
+    }
+
+    return totalPrice;
+  }
 
   void removeProductFromOrder(int index) {
     selectedOrderItems.removeAt(index);
@@ -43,7 +67,7 @@ class OrderCubit extends Cubit<OrderState> {
     emit(OrderItemsUpdated());
   }
 
-  Future<void> addOrder(BuildContext context, String buyer, String location, String rep) async {
+  Future<void> addOrder() async {
     if (!formkey.currentState!.validate()) {
       return;
     }
@@ -52,6 +76,20 @@ class OrderCubit extends Cubit<OrderState> {
       emit(OrderFailure("Please add at least one product"));
       return;
     }
+
+    if (buyercontroller.text.isEmpty) {
+      emit(OrderFailure("Please Add The BuyerName"));
+      return;
+    }
+    if (repcontroller.text.isEmpty) {
+      emit(OrderFailure("Please Add The RepName"));
+      return;
+    }
+    if (locationcontroller.text.isEmpty) {
+      emit(OrderFailure("Please Add The Location"));
+      return;
+    }
+
 
     try {
       emit(OrderLoading());
@@ -73,21 +111,31 @@ class OrderCubit extends Cubit<OrderState> {
 
       emit(OrderLoading());
       orderModel = OrderModel(
+        id: "",
         buyer: buyername,
         location: locationcontroller.text,
-        cost: double.tryParse(costcontroller.text),
+        cost: updateOrderTotalPrice(),
         rep: repcontroller.text,
         orderlist: selectedOrderItems,
         status: OrderStatus.pending,
       );
 
-
-      await FirebaseFirestore.instance
-          .collection("Orders")
-          .add({
+      final doc = await FirebaseFirestore.instance.collection("Orders").add({
         ...orderModel!.toJson(),
         "createdAt": FieldValue.serverTimestamp(),
       });
+
+      orderList.add(
+        OrderModel(
+          id: doc.id,
+          buyer: orderModel!.buyer,
+          location: orderModel!.location,
+          cost: orderModel!.cost,
+          rep: orderModel!.rep,
+          orderlist: orderModel!.orderlist,
+          status: orderModel!.status,
+        ),
+      );
 
       emit(OrderSuccess());
     } catch (e) {
