@@ -90,7 +90,6 @@ class OrderCubit extends Cubit<OrderState> {
       return;
     }
 
-
     try {
       emit(OrderLoading());
       final buyername = buyercontroller.text;
@@ -137,7 +136,23 @@ class OrderCubit extends Cubit<OrderState> {
         ),
       );
 
-      emit(OrderSuccess());
+      emit(OrderSuccess(orders: orderList));
+    } catch (e) {
+      emit(OrderFailure(e.toString()));
+    }
+  }
+
+  Future<void> getOrder() async {
+    try {
+      emit(OrderLoading());
+      final snapshot = await FirebaseFirestore.instance
+          .collection('Orders')
+          .get();
+
+      orderList = snapshot.docs.map((doc) {
+        return OrderModel.fromJson({...doc.data(), 'id': doc.id});
+      }).toList();
+      emit(OrderSuccess(orders: orderList));
     } catch (e) {
       emit(OrderFailure(e.toString()));
     }

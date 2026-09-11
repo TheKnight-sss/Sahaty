@@ -34,7 +34,7 @@ class OrderModel {
       orderlist: (json['orderlist'] as List?)
           ?.map((item) => OrderItemModel.fromjson(item))
           .toList(),
-      createdAt: json['createdAt'],
+      createdAt: json['createdAt'] as Timestamp,
       status: OrderStatus.values.firstWhere(
         (status) => status.name == json['status'],
         orElse: () => OrderStatus.pending,

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sihati/components/buttons/custom_button.dart';
 import 'package:sihati/core/functions/dailog.dart';
 import 'package:sihati/core/routes/navigation.dart';
+import 'package:sihati/core/routes/routes.dart';
 import 'package:sihati/features/order/presentation/cubit/order_cubit.dart';
 import 'package:sihati/features/order/presentation/cubit/order_state.dart';
 import 'package:sihati/features/order/presentation/widgets/order_item_list.dart';
@@ -52,6 +53,7 @@ class AddOrderScreen extends StatelessWidget {
               "Item Add Successfully",
               type: DialogType.success,
             );
+            pushReplacementTo(context, Routes.dashboard);
           } else if (state is OrderFailure) {
             pop(context);
             showMyDialog(context, state.message, type: DialogType.error);
@@ -71,10 +73,7 @@ class AddOrderScreen extends StatelessWidget {
                 OrderSummary(),
                 CustomButton(
                   onPressed: () {
-                    cubit.addOrder(
-                      
-                    );
-                    pop(context);
+                    cubit.addOrder();
                   },
                   color1: Color(0xff2563EB),
                   color2: Color(0xff1D4ED8),

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,6 +12,8 @@ import 'package:sihati/features/dashboard/presentation/widgets/head_title.dart';
 import 'package:sihati/features/dashboard/presentation/widgets/inventory_card.dart';
 import 'package:sihati/features/dashboard/presentation/widgets/order_card.dart';
 import 'package:sihati/features/dashboard/presentation/widgets/tab_button.dart';
+import 'package:sihati/features/order/presentation/cubit/order_cubit.dart';
+import 'package:sihati/features/order/presentation/cubit/order_state.dart';
 import 'package:sihati/features/products/presentation/cubit/product_cubit.dart';
 import 'package:sihati/features/products/presentation/cubit/product_state.dart';
 
@@ -51,6 +54,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     super.initState();
 
     context.read<ProductCubit>().getProduct();
+    context.read<OrderCubit>().getOrder();
   }
 
   @override
@@ -180,18 +184,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
           // =========================
           // ONLY PRODUCT AREA
           // =========================
-          Expanded(
-            child: BlocBuilder<ProductCubit, ProductState>(
-              builder: (context, state) {
-                if (state is ProductInitial) {
-                  return const Center(child: CircularProgressIndicator());
-                }
+          isSelected == "Inventory"
+              ? Expanded(
+                  child: BlocBuilder<ProductCubit, ProductState>(
+                    builder: (context, state) {
+                      if (state is ProductInitial) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
 
-                if (state is ProductSuccess) {
-                  final products = state.products;
+                      if (state is ProductSuccess) {
+                        final products = state.products;
 
-                  return isSelected == "Inventory"
-                      ? Padding(
+                        return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 10),
 
                           child: ListView.separated(
@@ -211,18 +215,70 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               );
                             },
                           ),
-                        )
-                      : OrderCard();
-                }
+                        );
+                      }
 
-                if (state is ProductFailure) {
-                  return const Center(child: Text("Something went wrong"));
-                }
+                      if (state is ProductFailure) {
+                        return const Center(
+                          child: Text("Something went wrong"),
+                        );
+                      }
 
-                return const SizedBox();
-              },
-            ),
-          ),
+                      return const SizedBox();
+                    },
+                  ),
+                )
+              : Expanded(
+                  child: BlocBuilder<OrderCubit, OrderState>(
+                    builder: (context, state) {
+                      if (state is OrderLoading) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      if (state is OrderSuccess) {
+                        final orders = state.orders;
+
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: ListView.separated(
+                            itemBuilder: (context, index) {
+                              final order = orders[index];
+
+                              final date = order.createdAt?.toDate();
+
+                              final formdate = date == null
+                                  ? ""
+                                  : '${date.day.toString().padLeft(2, '0')}/'
+                                        '${date.month.toString().padLeft(2, '0')}/'
+                                        '${date.year} - '
+                                        '${date.hour > 12
+                                            ? date.hour - 12
+                                            : date.hour == 0
+                                            ? 12
+                                            : date.hour}:'
+                                        '${date.minute.toString().padLeft(2, '0')} '
+                                        '${date.hour >= 12 ? 'PM' : 'AM'}';
+
+                              return OrderCard(
+                                name: order.buyer ?? "",
+                                loc: order.location ?? "",
+                                price: order.cost ?? 0,
+                                time: formdate.toString(),
+                              );
+                            },
+                            separatorBuilder: (context, index) {
+                              return const Gap(10);
+                            },
+                            itemCount: orders.length,
+                          ),
+                        );
+                      }
+                      if (state is OrderFailure) {
+                        return Center(child: Text(state.message));
+                      }
+                      return const SizedBox();
+                    },
+                  ),
+                ),
         ],
       ),
     );

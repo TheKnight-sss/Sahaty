@@ -8,11 +8,17 @@ import 'package:sihati/core/utils/style.dart';
 import 'package:sihati/features/dashboard/presentation/widgets/notes.dart';
 
 class OrderCard extends StatelessWidget {
-  const OrderCard({super.key});
+  const OrderCard({super.key, this.name, this.loc, this.price, this.time});
+
+  final String? name;
+  final String? loc;
+  final double? price;
+  final String? time;
 
 
   @override
   Widget build(BuildContext context) {
+    var cost = price.toString();
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
@@ -32,7 +38,7 @@ class OrderCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text("El Asel", style: Style.tab),
+                Text(name??"", style: Style.tab),
                 Spacer(),
                 Notes(text:"Done",select: false,),
               ],
@@ -46,11 +52,11 @@ class OrderCard extends StatelessWidget {
                   width: 15,
                 ),
                 Gap(3),
-                Text("القاهرة", style: TextStyle(color: Colors.grey)),
+                Text(loc??"", style: TextStyle(color: Colors.grey)),
                 Gap(2),
                 Icon(Icons.circle, size: 2.4, color: Colors.grey),
                 Gap(2),
-                Text("09:15", style: TextStyle(color: Colors.grey)),
+                Text(time??"", style: TextStyle(color: Colors.grey)),
               ],
             ),
             Row(
@@ -69,7 +75,7 @@ class OrderCard extends StatelessWidget {
                         ),
                       ),
                       const TextSpan(text: " : ",style: TextStyle(fontWeight: FontWeight.w400)),
-                      const TextSpan(text: "6,000",style: TextStyle(fontWeight: FontWeight.w400)),
+                     TextSpan(text: cost,style: TextStyle(fontWeight: FontWeight.w400)),
                       const TextSpan(text: " "),
                       TextSpan(text: "EGP")
                     ],
