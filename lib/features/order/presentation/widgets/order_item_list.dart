@@ -81,7 +81,7 @@ class OrderItemList extends StatelessWidget {
                           return OrderItemCard(
                             index: index,
                             orderproductname: order.name ?? '',
-                            orderproductquantity: order.quantity ?? 0,
+                            orderproductquantity: order.quantity,
                             orderproductprice: order.price??0,
                             orderproductunit: order.unit ?? '',
                             productcolor: colors[order.color]!,

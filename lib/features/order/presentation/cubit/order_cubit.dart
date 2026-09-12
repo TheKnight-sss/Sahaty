@@ -7,7 +7,7 @@ import 'package:sihati/features/order/presentation/cubit/order_state.dart';
 import 'package:sihati/features/products/models/product_model.dart';
 
 class OrderCubit extends Cubit<OrderState> {
-  OrderCubit() : super(OrderLoading());
+  OrderCubit() : super(OrderInitial());
 
   List<OrderItemModel> selectedOrderItems = [];
   List<OrderModel> orderList = [];
@@ -28,7 +28,7 @@ class OrderCubit extends Cubit<OrderState> {
           name: product.name,
           unit: product.unit,
           price: product.price,
-          quantity: 0,
+          quantity: null,
           color: product.color,
         ),
       );
@@ -72,24 +72,6 @@ class OrderCubit extends Cubit<OrderState> {
       return;
     }
 
-    if (selectedOrderItems.isEmpty) {
-      emit(OrderFailure("Please add at least one product"));
-      return;
-    }
-
-    if (buyercontroller.text.isEmpty) {
-      emit(OrderFailure("Please Add The BuyerName"));
-      return;
-    }
-    if (repcontroller.text.isEmpty) {
-      emit(OrderFailure("Please Add The RepName"));
-      return;
-    }
-    if (locationcontroller.text.isEmpty) {
-      emit(OrderFailure("Please Add The Location"));
-      return;
-    }
-
     try {
       emit(OrderLoading());
       final buyername = buyercontroller.text;
@@ -108,7 +90,6 @@ class OrderCubit extends Cubit<OrderState> {
         return;
       }
 
-      emit(OrderLoading());
       orderModel = OrderModel(
         id: "",
         buyer: buyername,
@@ -157,4 +138,11 @@ class OrderCubit extends Cubit<OrderState> {
       emit(OrderFailure(e.toString()));
     }
   }
+
+  void resetOrder() {
+  selectedOrderItems.clear();
+  buyercontroller.clear();
+  locationcontroller.clear();
+  repcontroller.clear();
+}
 }

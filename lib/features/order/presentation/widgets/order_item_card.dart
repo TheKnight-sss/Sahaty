@@ -60,58 +60,67 @@ class _OrderItemCardState extends State<OrderItemCard> {
         color: Colors.grey[100],
         borderRadius: BorderRadius.circular(10),
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Column(
         children: [
-          Container(
-            width: 50,
-            height: 50,
-            decoration: BoxDecoration(
-              color: Colors.grey[100],
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Center(
-              child: SvgPicture.asset(
-                AppImages.logo,
-                width: 40,
-                height: 40,
-                colorFilter: ColorFilter.mode(
-                  widget.productcolor,
-                  BlendMode.srcIn,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: 50,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: BorderRadius.circular(10),
                 ),
+                child: Center(
+                  child: SvgPicture.asset(
+                    AppImages.logo,
+                    width: 40,
+                    height: 40,
+                    colorFilter: ColorFilter.mode(
+                      widget.productcolor,
+                      BlendMode.srcIn,
+                    ),
+                  ),
+                ),
+              ),
+
+              const Gap(5),
+              Text(
+                widget.orderproductname,
+                style: Style.loginFieldLabel.copyWith(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                ),
+              ),
+              Spacer(),
+              Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: IconButton(
+                  onPressed: widget.onpressed,
+                  icon: const Icon(
+                    Icons.delete_outline_rounded,
+                    color: Colors.red,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Transform.translate(offset: Offset(-50, -18),
+            child: Text(
+              "Price: $totalprice",
+              style: Style.loginFieldLabel.copyWith(
+                fontSize: 18,
+                fontWeight: FontWeight.w400,
+                color: Colors.grey[600],
               ),
             ),
           ),
-
-          const Gap(10),
-
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.orderproductname,
-                  style: Style.loginFieldLabel.copyWith(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.black,
-                  ),
-                ),
-
-                Text(
-                  "Price: $totalprice",
-                  style: Style.loginFieldLabel.copyWith(
-                    fontSize: 18,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.grey[600],
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          Row(
             children: [
               Text(
                 "Quantity",
@@ -121,10 +130,8 @@ class _OrderItemCardState extends State<OrderItemCard> {
                   color: Colors.black,
                 ),
               ),
-
-              SizedBox(
-                width: 100,
-                height: 35,
+              Gap(5),
+              Expanded(
                 child: TextField(
                   controller: orderproductquantitycontroller,
                   keyboardType: TextInputType.number,
@@ -149,19 +156,6 @@ class _OrderItemCardState extends State<OrderItemCard> {
                 ),
               ),
             ],
-          ),
-
-          const Gap(10),
-
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: IconButton(
-              onPressed: widget.onpressed,
-              icon: const Icon(Icons.delete_outline_rounded, color: Colors.red),
-            ),
           ),
         ],
       ),

@@ -34,7 +34,7 @@ class HeadTitle extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Gap(40),
+          Gap(20),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

@@ -11,11 +11,27 @@ import 'package:sihati/features/order/presentation/widgets/order_information_car
 import 'package:sihati/features/order/presentation/widgets/order_summary.dart';
 import 'package:sihati/features/products/presentation/widgets/add_product_title.dart';
 
-class AddOrderScreen extends StatelessWidget {
+class AddOrderScreen extends StatefulWidget {
   const AddOrderScreen({super.key});
 
   @override
+  State<AddOrderScreen> createState() => _AddOrderScreenState();
+}
+
+class _AddOrderScreenState extends State<AddOrderScreen> {
+  @override
+
+   @override
+  void initState() {
+    super.initState();
+
+    context.read<OrderCubit>().resetOrder();
+  }
+
+  @override
   Widget build(BuildContext context) {
+
+    
     var cubit = context.read<OrderCubit>();
     return Scaffold(
       backgroundColor: const Color(0xFFF9FAFB),
@@ -48,12 +64,12 @@ class AddOrderScreen extends StatelessWidget {
             showLoadingDialog(context);
           } else if (state is OrderSuccess) {
             pop(context);
+            pushReplacementTo(context, Routes.dashboard);
             showMyDialog(
               context,
               "Item Add Successfully",
               type: DialogType.success,
-            );
-            pushReplacementTo(context, Routes.dashboard);
+            );            
           } else if (state is OrderFailure) {
             pop(context);
             showMyDialog(context, state.message, type: DialogType.error);

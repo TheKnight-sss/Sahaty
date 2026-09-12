@@ -8,12 +8,13 @@ import 'package:sihati/core/utils/style.dart';
 import 'package:sihati/features/dashboard/presentation/widgets/notes.dart';
 
 class OrderCard extends StatelessWidget {
-  const OrderCard({super.key, this.name, this.loc, this.price, this.time});
+  const OrderCard({super.key, this.name, this.loc, this.price, this.time, this.rep});
 
   final String? name;
   final String? loc;
   final double? price;
   final String? time;
+  final String? rep;
 
 
   @override
@@ -101,7 +102,7 @@ class OrderCard extends StatelessWidget {
                       Gap(5),
                       Text(":"),
                       Gap(5),
-                      Text("محمد أحمد"),
+                      Text(rep.toString()),
                       Spacer(),
                       Notes(text:"تم تأكيد الإستلام".tr(),select: true,)
 

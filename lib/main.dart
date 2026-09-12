@@ -1,5 +1,7 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sihati/core/routes/routes.dart';
@@ -27,9 +29,12 @@ void main() async {
         providers: [
           BlocProvider(create: (context) => AuthCubit()),
           BlocProvider(create: (context) => ProductCubit()),
-          BlocProvider(create: (context) => OrderCubit())
+          BlocProvider(create: (context) => OrderCubit()),
         ],
-        child: const MyApp(),
+        child: DevicePreview(
+          enabled: kDebugMode,
+          builder: (context) => const MyApp(),
+        ),
       ),
     ),
   );
@@ -47,6 +52,7 @@ class MyApp extends StatelessWidget {
       locale: context.locale,
       localizationsDelegates: context.localizationDelegates,
       supportedLocales: context.supportedLocales,
+      builder: DevicePreview.appBuilder,
     );
   }
 }

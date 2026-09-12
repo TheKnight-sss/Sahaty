@@ -53,8 +53,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     super.initState();
 
-    context.read<ProductCubit>().getProduct();
-    context.read<OrderCubit>().getOrder();
+    if (isSelected == 'Inventory') {
+      context.read<ProductCubit>().getProduct();
+    } else {
+      context.read<OrderCubit>().getOrder();
+    }
   }
 
   @override
@@ -180,10 +183,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ],
             ),
           ),
-
-          // =========================
-          // ONLY PRODUCT AREA
-          // =========================
           isSelected == "Inventory"
               ? Expanded(
                   child: BlocBuilder<ProductCubit, ProductState>(
@@ -228,6 +227,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     },
                   ),
                 )
+              //------------------------------------------------------------------------------------------------------------------------------------
               : Expanded(
                   child: BlocBuilder<OrderCubit, OrderState>(
                     builder: (context, state) {
@@ -263,6 +263,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 loc: order.location ?? "",
                                 price: order.cost ?? 0,
                                 time: formdate.toString(),
+                                rep: order.rep,
                               );
                             },
                             separatorBuilder: (context, index) {

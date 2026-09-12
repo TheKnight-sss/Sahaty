@@ -1,6 +1,8 @@
 import 'package:sihati/features/order/models/order_model.dart';
 
 class OrderState {}
+ 
+  class OrderInitial extends OrderState{}
 
   class OrderLoading extends OrderState{}
 
