@@ -100,23 +100,10 @@ class OrderCubit extends Cubit<OrderState> {
         status: OrderStatus.pending,
       );
 
-      final doc = await FirebaseFirestore.instance.collection("Orders").add({
+      await FirebaseFirestore.instance.collection("Orders").add({
         ...orderModel!.toJson(),
         "createdAt": FieldValue.serverTimestamp(),
       });
-
-      orderList.add(
-        OrderModel(
-          id: doc.id,
-          buyer: orderModel!.buyer,
-          location: orderModel!.location,
-          cost: orderModel!.cost,
-          rep: orderModel!.rep,
-          orderlist: orderModel!.orderlist,
-          status: orderModel!.status,
-        ),
-      );
-
       emit(OrderSuccess(orders: orderList));
     } catch (e) {
       emit(OrderFailure(e.toString()));
@@ -140,9 +127,9 @@ class OrderCubit extends Cubit<OrderState> {
   }
 
   void resetOrder() {
-  selectedOrderItems.clear();
-  buyercontroller.clear();
-  locationcontroller.clear();
-  repcontroller.clear();
-}
+    selectedOrderItems.clear();
+    buyercontroller.clear();
+    locationcontroller.clear();
+    repcontroller.clear();
+  }
 }

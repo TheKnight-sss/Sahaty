@@ -20,8 +20,6 @@ class AddOrderScreen extends StatefulWidget {
 
 class _AddOrderScreenState extends State<AddOrderScreen> {
   @override
-
-   @override
   void initState() {
     super.initState();
 
@@ -30,8 +28,6 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-    
     var cubit = context.read<OrderCubit>();
     return Scaffold(
       backgroundColor: const Color(0xFFF9FAFB),
@@ -63,13 +59,9 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
           if (state is OrderLoading) {
             showLoadingDialog(context);
           } else if (state is OrderSuccess) {
-            pop(context);
+            pop(context); // close loading dialog
+
             pushReplacementTo(context, Routes.dashboard);
-            showMyDialog(
-              context,
-              "Item Add Successfully",
-              type: DialogType.success,
-            );            
           } else if (state is OrderFailure) {
             pop(context);
             showMyDialog(context, state.message, type: DialogType.error);

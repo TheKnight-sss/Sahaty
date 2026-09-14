@@ -55,8 +55,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
     if (isSelected == 'Inventory') {
       context.read<ProductCubit>().getProduct();
-    } else {
-      context.read<OrderCubit>().getOrder();
     }
   }
 
@@ -129,6 +127,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     setState(() {
                       isSelected = "Orders";
                     });
+                    context.read<OrderCubit>().getOrder();
                   },
                 ),
               ],

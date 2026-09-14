@@ -24,7 +24,7 @@ class DetailedTab extends StatelessWidget {
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: Colors.white,
-                fontSize: 18,
+                fontSize: 22,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -34,7 +34,7 @@ class DetailedTab extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Color(0xFFBFDBFE),
-                fontSize: 12,
+                fontSize: 14,
               ),
             ),
           ],
