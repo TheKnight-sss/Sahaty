@@ -12,6 +12,7 @@ class OrderCubit extends Cubit<OrderState> {
   List<OrderItemModel> selectedOrderItems = [];
   List<OrderModel> orderList = [];
   OrderModel? orderModel;
+  List<OrderModel>? doneOrder;
   final buyercontroller = TextEditingController();
   final locationcontroller = TextEditingController();
   final repcontroller = TextEditingController();
@@ -105,6 +106,21 @@ class OrderCubit extends Cubit<OrderState> {
         "createdAt": FieldValue.serverTimestamp(),
       });
       emit(OrderSuccess(orders: orderList));
+    } catch (e) {
+      emit(OrderFailure(e.toString()));
+    }
+  }
+
+  Future<void> updateState(OrderModel order) async {
+    try {
+      emit(OrderLoading());
+
+      await FirebaseFirestore.instance
+          .collection('Orders')
+          .doc(order.id)
+          .update({'status': OrderStatus.delivered});
+
+          await getOrder();
     } catch (e) {
       emit(OrderFailure(e.toString()));
     }

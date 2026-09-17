@@ -8,13 +8,15 @@ import 'package:sihati/core/utils/style.dart';
 import 'package:sihati/features/dashboard/presentation/widgets/notes.dart';
 
 class OrderCard extends StatelessWidget {
-  const OrderCard({super.key, this.name, this.loc, this.price, this.time, this.rep});
+  const OrderCard({super.key, this.name, this.loc, this.price, this.time, this.rep, this.ontap, this.confirmed = false});
 
   final String? name;
   final String? loc;
   final double? price;
   final String? time;
   final String? rep;
+  final VoidCallback? ontap;
+  final bool confirmed;
 
 
   @override
@@ -104,7 +106,8 @@ class OrderCard extends StatelessWidget {
                       Gap(5),
                       Text(rep.toString()),
                       Spacer(),
-                      Notes(text:"تم تأكيد الإستلام".tr(),select: true,)
+                      (confirmed == false) ?
+                      GestureDetector(onTap: ontap,child: Notes(text:"تم تأكيد الإستلام".tr(),select: true,)) : const SizedBox()
 
                     ],
                   ),

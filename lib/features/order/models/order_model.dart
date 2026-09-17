@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sihati/features/order/models/order_item_model.dart';
 
-enum OrderStatus { pending, onDelivery, delivered }
+enum OrderStatus { pending, delivered }
 
 class OrderModel {
   final String? id;
