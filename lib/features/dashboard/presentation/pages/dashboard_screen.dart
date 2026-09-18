@@ -12,6 +12,7 @@ import 'package:sihati/features/dashboard/presentation/widgets/head_title.dart';
 import 'package:sihati/features/dashboard/presentation/widgets/inventory_card.dart';
 import 'package:sihati/features/dashboard/presentation/widgets/order_card.dart';
 import 'package:sihati/features/dashboard/presentation/widgets/tab_button.dart';
+import 'package:sihati/features/order/models/order_model.dart';
 import 'package:sihati/features/order/presentation/cubit/order_cubit.dart';
 import 'package:sihati/features/order/presentation/cubit/order_state.dart';
 import 'package:sihati/features/products/presentation/cubit/product_cubit.dart';
@@ -53,9 +54,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     super.initState();
 
-    if (isSelected == 'Inventory') {
       context.read<ProductCubit>().getProduct();
-    }
+      context.read<OrderCubit>().getOrder();
   }
 
   @override
@@ -127,7 +127,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     setState(() {
                       isSelected = "Orders";
                     });
-                    context.read<OrderCubit>().getOrder();
+                    
                   },
                 ),
               ],
@@ -263,6 +263,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 price: order.cost ?? 0,
                                 time: formdate.toString(),
                                 rep: order.rep,
+                                confirmed: order.status == OrderStatus.delivered,
+                                ontap: () {
+                                  
+                                  context.read<OrderCubit>().updateState(order);
+                                },
                               );
                             },
                             separatorBuilder: (context, index) {

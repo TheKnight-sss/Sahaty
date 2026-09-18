@@ -56,7 +56,7 @@ class _AddOrderScreenState extends State<AddOrderScreen> {
       ),
       body: BlocListener<OrderCubit, OrderState>(
         listener: (context, state) {
-          if (state is OrderLoading) {
+          if (state is OrderAdding) {
             showLoadingDialog(context);
           } else if (state is OrderSuccess) {
             pop(context); // close loading dialog

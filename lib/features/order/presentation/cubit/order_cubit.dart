@@ -12,12 +12,13 @@ class OrderCubit extends Cubit<OrderState> {
   List<OrderItemModel> selectedOrderItems = [];
   List<OrderModel> orderList = [];
   OrderModel? orderModel;
-  List<OrderModel>? doneOrder;
+  List<OrderModel> doneOrder = [];
   final buyercontroller = TextEditingController();
   final locationcontroller = TextEditingController();
   final repcontroller = TextEditingController();
   final formkey = GlobalKey<FormState>();
 
+  //!addProductToOrder//////////////////////////////////////
   void addProductToOrder(ProductModel product) {
     final index = selectedOrderItems.indexWhere(
       (item) => item.name == product.name,
@@ -38,6 +39,7 @@ class OrderCubit extends Cubit<OrderState> {
     emit(OrderItemsUpdated());
   }
 
+  //!updateProductQuantity////////////////////////////////////////////
   void updateProductQuantity(int index, double quantity) {
     final item = selectedOrderItems[index];
 
@@ -52,6 +54,7 @@ class OrderCubit extends Cubit<OrderState> {
     emit(OrderItemsUpdated());
   }
 
+  //!updateOrderTotalPrice//////////////////////////////////////////////
   double updateOrderTotalPrice() {
     double totalPrice = 0;
 
@@ -62,19 +65,26 @@ class OrderCubit extends Cubit<OrderState> {
     return totalPrice;
   }
 
+  //!getdoneOrderTotal////////////////////////////////////////////////////////
+  double getdoneOrderTotal() {
+    return doneOrder.fold(0, (total, order) => total + (order.cost ?? 0));
+  }
+  //!removeProductFromOrder\\\\\\\\\\\\\\
+
   void removeProductFromOrder(int index) {
     selectedOrderItems.removeAt(index);
 
     emit(OrderItemsUpdated());
   }
 
+  //!addOrder/////////////////////////////////////
   Future<void> addOrder() async {
     if (!formkey.currentState!.validate()) {
       return;
     }
 
     try {
-      emit(OrderLoading());
+      emit(OrderAdding());
       final buyername = buyercontroller.text;
 
       final existingOrder = await FirebaseFirestore.instance
@@ -111,6 +121,8 @@ class OrderCubit extends Cubit<OrderState> {
     }
   }
 
+  //!updateState////////////////////////////////////////////
+
   Future<void> updateState(OrderModel order) async {
     try {
       emit(OrderLoading());
@@ -118,29 +130,36 @@ class OrderCubit extends Cubit<OrderState> {
       await FirebaseFirestore.instance
           .collection('Orders')
           .doc(order.id)
-          .update({'status': OrderStatus.delivered});
+          .update({'status': OrderStatus.delivered.name});
 
-          await getOrder();
+      await getOrder();
     } catch (e) {
       emit(OrderFailure(e.toString()));
     }
   }
+  //!getOrder///////////////////////////////////////////////
 
   Future<void> getOrder() async {
     try {
       emit(OrderLoading());
       final snapshot = await FirebaseFirestore.instance
           .collection('Orders')
+          .orderBy('createdAt',descending: true)
           .get();
 
       orderList = snapshot.docs.map((doc) {
         return OrderModel.fromJson({...doc.data(), 'id': doc.id});
       }).toList();
+
+      doneOrder = orderList
+          .where((order) => order.status == OrderStatus.delivered)
+          .toList();
       emit(OrderSuccess(orders: orderList));
     } catch (e) {
       emit(OrderFailure(e.toString()));
     }
   }
+  //!resetOrder////////////////////////////////////////
 
   void resetOrder() {
     selectedOrderItems.clear();

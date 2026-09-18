@@ -5,10 +5,11 @@ import 'package:sihati/core/constants/app_images.dart';
 import 'package:sihati/core/utils/appcolors.dart';
 
 class Notes extends StatelessWidget {
-  const Notes({super.key, required this.text, required this.select});
+  const Notes({super.key, required this.text, required this.select, required this.color});
 
   final String text;
   final bool select;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +17,7 @@ class Notes extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(50),
-        color: Appcolors.slider.withValues(alpha: .15),
+        color: color.withValues(alpha: .15),
       ),
       child: Center(
         child: Row(
@@ -37,7 +38,7 @@ class Notes extends StatelessWidget {
             Text(
               text.tr(),
               style: TextStyle(
-                color: Appcolors.slider,
+                color: color,
                 fontWeight: FontWeight.w600,
               ),
             ),

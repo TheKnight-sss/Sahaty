@@ -2,9 +2,10 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class DetailedTab extends StatelessWidget {
-  const DetailedTab({
-    super.key,
-  });
+  const DetailedTab({super.key, required this.subtitle, required this.txt});
+
+  final String txt;
+  final String subtitle;
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +20,7 @@ class DetailedTab extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              // "${(revenue / 1000).toStringAsFixed(1)}K",
-              "0000",
+              txt,
               textAlign: TextAlign.center,
               style: const TextStyle(
                 color: Colors.white,
@@ -29,13 +29,10 @@ class DetailedTab extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 4),
-             Text(
-              "الإيراد (جنيه)".tr(),
+            Text(
+              subtitle.tr(),
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Color(0xFFBFDBFE),
-                fontSize: 14,
-              ),
+              style: TextStyle(color: Color(0xFFBFDBFE), fontSize: 14),
             ),
           ],
         ),

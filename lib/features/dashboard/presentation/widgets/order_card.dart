@@ -8,7 +8,16 @@ import 'package:sihati/core/utils/style.dart';
 import 'package:sihati/features/dashboard/presentation/widgets/notes.dart';
 
 class OrderCard extends StatelessWidget {
-  const OrderCard({super.key, this.name, this.loc, this.price, this.time, this.rep, this.ontap, this.confirmed = false});
+  const OrderCard({
+    super.key,
+    this.name,
+    this.loc,
+    this.price,
+    this.time,
+    this.rep,
+    this.ontap,
+    this.confirmed = false,
+  });
 
   final String? name;
   final String? loc;
@@ -17,7 +26,6 @@ class OrderCard extends StatelessWidget {
   final String? rep;
   final VoidCallback? ontap;
   final bool confirmed;
-
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +49,19 @@ class OrderCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text(name??"", style: Style.tab),
+                Text(name ?? "", style: Style.tab),
                 Spacer(),
-                Notes(text:"Done",select: false,),
+                (confirmed == false)
+                    ? Notes(
+                        text: "OnDelivering",
+                        select: false,
+                        color: Appcolors.splashup,
+                      )
+                    : Notes(
+                        text: "Done",
+                        select: false,
+                        color: Appcolors.slider,
+                      ),
               ],
             ),
             Row(
@@ -55,11 +73,11 @@ class OrderCard extends StatelessWidget {
                   width: 15,
                 ),
                 Gap(3),
-                Text(loc??"", style: TextStyle(color: Colors.grey)),
+                Text(loc ?? "", style: TextStyle(color: Colors.grey)),
                 Gap(2),
                 Icon(Icons.circle, size: 2.4, color: Colors.grey),
                 Gap(2),
-                Text(time??"", style: TextStyle(color: Colors.grey)),
+                Text(time ?? "", style: TextStyle(color: Colors.grey)),
               ],
             ),
             Row(
@@ -77,10 +95,16 @@ class OrderCard extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const TextSpan(text: " : ",style: TextStyle(fontWeight: FontWeight.w400)),
-                     TextSpan(text: cost,style: TextStyle(fontWeight: FontWeight.w400)),
+                      const TextSpan(
+                        text: " : ",
+                        style: TextStyle(fontWeight: FontWeight.w400),
+                      ),
+                      TextSpan(
+                        text: cost,
+                        style: TextStyle(fontWeight: FontWeight.w400),
+                      ),
                       const TextSpan(text: " "),
-                      TextSpan(text: "EGP")
+                      TextSpan(text: "EGP"),
                     ],
                   ),
                 ),
@@ -98,17 +122,29 @@ class OrderCard extends StatelessWidget {
                   Gap(10),
                   Row(
                     children: [
-                      Icon(Icons.circle,color: Appcolors.login,size: 12,),
+                      Icon(Icons.circle, color: Appcolors.login, size: 12),
                       Gap(5),
-                      Text("Rep".tr(),style: TextStyle(color: Colors.black.withValues(alpha: .7)),),
+                      Text(
+                        "Rep".tr(),
+                        style: TextStyle(
+                          color: Colors.black.withValues(alpha: .7),
+                        ),
+                      ),
                       Gap(5),
                       Text(":"),
                       Gap(5),
                       Text(rep.toString()),
                       Spacer(),
-                      (confirmed == false) ?
-                      GestureDetector(onTap: ontap,child: Notes(text:"تم تأكيد الإستلام".tr(),select: true,)) : const SizedBox()
-
+                      (confirmed == false)
+                          ? GestureDetector(
+                              onTap: ontap,
+                              child: Notes(
+                                text: "تم تأكيد الإستلام".tr(),
+                                select: true,
+                                color: Appcolors.slider,
+                              ),
+                            )
+                          : const SizedBox(),
                     ],
                   ),
                 ],

@@ -1,14 +1,16 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:sihati/core/functions/extension.dart';
 import 'package:sihati/core/utils/style.dart';
 import 'package:sihati/features/dashboard/presentation/widgets/detailed_tab.dart';
+import 'package:sihati/features/order/models/order_model.dart';
+import 'package:sihati/features/order/presentation/cubit/order_cubit.dart';
+import 'package:sihati/features/order/presentation/cubit/order_state.dart';
 
 class HeadTitle extends StatelessWidget {
-  const HeadTitle({
-    super.key,
-  });
+  const HeadTitle({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +20,7 @@ class HeadTitle extends StatelessWidget {
         gradient: LinearGradient(
           colors: [Color(0xff2563EB), Color(0xff1D4ED8)],
         ),
-    
+
         borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(30),
           bottomRight: Radius.circular(30),
@@ -54,15 +56,38 @@ class HeadTitle extends StatelessWidget {
             ],
           ),
           Gap(5),
-          Text(
-            "Inventory and Orders Dashboard".tr(),
-            style: Style.subheader,
-          ),
+          Text("Inventory and Orders Dashboard".tr(), style: Style.subheader),
           Gap(8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            spacing: 10,
-            children: [DetailedTab(), DetailedTab(), DetailedTab()],
+          BlocBuilder<OrderCubit, OrderState>(
+            buildWhen: (previous, current) {
+              return current is OrderSuccess || current is OrderFailure;
+            },
+            builder: (context, state) {
+              var cubit = context.read<OrderCubit>();
+              if (state is OrderSuccess) {
+                final orders = state.orders;
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  spacing: 10,
+                  children: [
+                    DetailedTab(
+                      txt:
+                          "${(cubit.getdoneOrderTotal() / 1000).toStringAsFixed(1)}K",
+                      subtitle: "Revenue (EGP)",
+                    ),
+                    DetailedTab(
+                      txt:
+                          "${orders.where((orders) => orders.status == OrderStatus.pending).length}",
+                      subtitle: "OnDelivering",
+                    ),
+                  ],
+                );
+              }
+              if (state is OrderFailure) {
+                return Center(child: Text(state.message));
+              }
+              return const SizedBox();
+            },
           ),
         ],
       ),

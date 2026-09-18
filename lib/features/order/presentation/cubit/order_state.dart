@@ -6,6 +6,8 @@ class OrderState {}
 
   class OrderLoading extends OrderState{}
 
+  class OrderAdding extends OrderState {}
+
   class OrderSuccess extends OrderState{
     final List<OrderModel> orders;
     OrderSuccess({required this.orders});
