@@ -2,10 +2,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:sihati/components/buttons/custom_button.dart';
 import 'package:sihati/core/constants/app_images.dart';
 import 'package:sihati/core/utils/appcolors.dart';
 import 'package:sihati/core/utils/style.dart';
 import 'package:sihati/features/dashboard/presentation/widgets/notes.dart';
+import 'package:sihati/features/order/models/order_model.dart';
 
 class OrderCard extends StatelessWidget {
   const OrderCard({
@@ -16,7 +18,8 @@ class OrderCard extends StatelessWidget {
     this.time,
     this.rep,
     this.ontap,
-    this.confirmed = false,
+    required this.status,
+    required this.onPressed,
   });
 
   final String? name;
@@ -25,8 +28,8 @@ class OrderCard extends StatelessWidget {
   final String? time;
   final String? rep;
   final VoidCallback? ontap;
-  final bool confirmed;
-
+  final VoidCallback onPressed;
+  final OrderStatus status;
   @override
   Widget build(BuildContext context) {
     var cost = price.toString();
@@ -51,17 +54,20 @@ class OrderCard extends StatelessWidget {
               children: [
                 Text(name ?? "", style: Style.tab),
                 Spacer(),
-                (confirmed == false)
-                    ? Notes(
-                        text: "OnDelivering",
-                        select: false,
-                        color: Appcolors.splashup,
-                      )
-                    : Notes(
-                        text: "Done",
-                        select: false,
-                        color: Appcolors.slider,
-                      ),
+                if (status == OrderStatus.onDelivering)
+                  Notes(
+                    text: "OnDelivering",
+                    select: false,
+                    color: Appcolors.splashup,
+                  )
+                else if (status == OrderStatus.delivered)
+                  Notes(text: "Done", select: false, color: Appcolors.slider)
+                else
+                  Notes(
+                    text: "Pending",
+                    select: false,
+                    color: Appcolors.pending,
+                  ),
               ],
             ),
             Row(
@@ -120,33 +126,62 @@ class OrderCard extends StatelessWidget {
               child: Column(
                 children: [
                   Gap(10),
-                  Row(
-                    children: [
-                      Icon(Icons.circle, color: Appcolors.login, size: 12),
-                      Gap(5),
-                      Text(
-                        "Rep".tr(),
-                        style: TextStyle(
-                          color: Colors.black.withValues(alpha: .7),
-                        ),
+                  if (status == OrderStatus.pending)
+                    CustomButton(
+                      onPressed: onPressed,
+                      color1: Appcolors.l1,
+                      color2: Appcolors.l2,
+                      color3: Appcolors.l3,
+                      child: Row(
+                        children: [
+                          Icon(Icons.person_2_outlined),
+                          Text("Assign Rep For Delivery"),
+                        ],
                       ),
-                      Gap(5),
-                      Text(":"),
-                      Gap(5),
-                      Text(rep.toString()),
-                      Spacer(),
-                      (confirmed == false)
-                          ? GestureDetector(
-                              onTap: ontap,
-                              child: Notes(
-                                text: "تم تأكيد الإستلام".tr(),
-                                select: true,
-                                color: Appcolors.slider,
-                              ),
-                            )
-                          : const SizedBox(),
-                    ],
-                  ),
+                    )
+                  else if (status == OrderStatus.onDelivering)
+                    Row(
+                      children: [
+                        Icon(Icons.circle, color: Appcolors.login, size: 12),
+                        Gap(5),
+                        Text(
+                          "Rep".tr(),
+                          style: TextStyle(
+                            color: Colors.black.withValues(alpha: .7),
+                          ),
+                        ),
+                        Gap(5),
+                        Text(":"),
+                        Gap(5),
+                        Text(rep.toString()),
+                        Spacer(),
+                        GestureDetector(
+                          onTap: ontap,
+                          child: Notes(
+                            text: "تم تأكيد الإستلام".tr(),
+                            select: true,
+                            color: Appcolors.slider,
+                          ),
+                        ),
+                      ],
+                    )
+                  else
+                    Row(
+                      children: [
+                        Icon(Icons.circle, color: Appcolors.login, size: 12),
+                        Gap(5),
+                        Text(
+                          "Rep".tr(),
+                          style: TextStyle(
+                            color: Colors.black.withValues(alpha: .7),
+                          ),
+                        ),
+                        Gap(5),
+                        Text(":"),
+                        Gap(5),
+                        Text(rep.toString()),
+                      ],
+                    ),
                 ],
               ),
             ),

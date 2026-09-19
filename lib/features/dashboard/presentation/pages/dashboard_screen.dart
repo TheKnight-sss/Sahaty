@@ -263,10 +263,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 price: order.cost ?? 0,
                                 time: formdate.toString(),
                                 rep: order.rep,
-                                confirmed: order.status == OrderStatus.delivered,
-                                ontap: () {
-                                  
+                                status: order.status,
+                                ontap: () {                                  
                                   context.read<OrderCubit>().updateState(order);
+                                },
+                                onPressed: () {
+                                  
                                 },
                               );
                             },
