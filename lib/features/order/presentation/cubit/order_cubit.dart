@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sihati/features/order/models/buyer_model.dart';
 import 'package:sihati/features/order/models/order_item_model.dart';
 import 'package:sihati/features/order/models/order_model.dart';
 import 'package:sihati/features/order/presentation/cubit/order_state.dart';
@@ -11,12 +12,15 @@ class OrderCubit extends Cubit<OrderState> {
 
   List<OrderItemModel> selectedOrderItems = [];
   List<OrderModel> orderList = [];
-  OrderModel? orderModel;
   List<OrderModel> doneOrder = [];
+
+  OrderModel? orderModel;
+  
   final buyercontroller = TextEditingController();
   final locationcontroller = TextEditingController();
   final repcontroller = TextEditingController();
   final formkey = GlobalKey<FormState>();
+  
 
   //!addProductToOrder//////////////////////////////////////
   void addProductToOrder(ProductModel product) {

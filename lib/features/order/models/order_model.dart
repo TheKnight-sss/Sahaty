@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:sihati/features/order/models/order_item_model.dart';
 
-enum OrderStatus { pending,onDelivering ,delivered }
+enum OrderStatus { pending, onDelivering, delivered }
 
 class OrderModel {
   final String? id;
+  final String? buyerId;
   final String? buyer;
   final String? location;
   final double? cost;
@@ -22,11 +23,13 @@ class OrderModel {
     this.orderlist,
     this.createdAt,
     this.status = OrderStatus.pending,
+    this.buyerId,
   });
 
   factory OrderModel.fromJson(Map<String, dynamic> json) {
     return OrderModel(
       id: json['id'],
+      buyerId: json['buyerId'],
       buyer: json['buyer'],
       location: json['location'],
       cost: (json['cost'] as num?)?.toDouble(),
@@ -44,7 +47,8 @@ class OrderModel {
 
   Map<String, dynamic> toJson() {
     return {
-      'id':id,
+      'id': id,
+      'buyerId': buyerId,
       'buyer': buyer,
       'location': location,
       'cost': cost,

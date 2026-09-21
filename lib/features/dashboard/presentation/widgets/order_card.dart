@@ -131,12 +131,16 @@ class OrderCard extends StatelessWidget {
                       onPressed: onPressed,
                       color1: Appcolors.l1,
                       color2: Appcolors.l2,
-                      color3: Appcolors.l3,
-                      child: Row(
-                        children: [
-                          Icon(Icons.person_2_outlined),
-                          Text("Assign Rep For Delivery"),
-                        ],
+                      color3: Appcolors.l2,
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.person_2_outlined,color: Colors.white,),
+                            Gap(5),
+                            Text("Assign Rep For Delivery",style: TextStyle(color: Colors.white),),
+                          ],
+                        ),
                       ),
                     )
                   else if (status == OrderStatus.onDelivering)
