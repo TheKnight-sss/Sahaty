@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sihati/features/order/models/buyer_model.dart';
 import 'package:sihati/features/order/models/order_item_model.dart';
 import 'package:sihati/features/order/models/order_model.dart';
 import 'package:sihati/features/order/presentation/cubit/order_state.dart';

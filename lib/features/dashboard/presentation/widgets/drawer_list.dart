@@ -78,7 +78,7 @@ class DrawerList extends StatelessWidget {
         ListTile(
           title: Text("Add Order Attributes".tr()),
           onTap: () {
-            pushTo(context, Routes.addorder);
+            pushTo(context, Routes.addattribute);
           },
           leading:Icon(Icons.add_circle_outline_sharp) ,
         ),

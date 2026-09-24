@@ -14,6 +14,16 @@ class BuyerCubit extends Cubit<BuyerState> {
 
   Future<void> addBuyers() async {
     try {
+      emit(BuyerLoading());
+      final buyername = buyerNameController.text;
+      final existingbuyer = await FirebaseFirestore.instance
+          .collection('Buyers')
+          .where('buyer', isEqualTo: buyername)
+          .get();
+
+          if(existingbuyer.docs.isNotEmpty){
+            emit(BuyerFailure("This Buyer Is Already Exist"));
+          }
       final buyer = BuyerModel(
         name: buyerNameController.text,
         location: locationController.text,
@@ -22,25 +32,31 @@ class BuyerCubit extends Cubit<BuyerState> {
           .collection('Buyers')
           .add(buyer.toJson());
 
-          final newbuyer = BuyerModel(id: doc.id,name: buyer.name, location: buyer.location);
+      final newbuyer = BuyerModel(
+        id: doc.id,
+        name: buyer.name,
+        location: buyer.location,
+      );
 
-          buyersList.add(newbuyer);
+      buyersList.add(newbuyer);
     } catch (e) {
       emit(BuyerFailure(e.toString()));
     }
   }
 
-  Future<void> getBuyers () async{
+  Future<void> getBuyers() async {
     try {
       emit(BuyerLoading());
-      final snapshot = await FirebaseFirestore.instance.collection('Buyers').get();
-      
-      buyersList = snapshot.docs.map((doc){
-        return BuyerModel.fromJson({...doc.data(),'id': doc.id});
+      final snapshot = await FirebaseFirestore.instance
+          .collection('Buyers')
+          .get();
+
+      buyersList = snapshot.docs.map((doc) {
+        return BuyerModel.fromJson({...doc.data(), 'id': doc.id});
       }).toList();
       emit(BuyerLoaded());
     } catch (e) {
-      emit(BuyerFailure(e.toString()));      
+      emit(BuyerFailure(e.toString()));
     }
   }
 }

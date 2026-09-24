@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:sihati/features/auth/presentation/pages/login_screen.dart';
 import 'package:sihati/features/auth/presentation/pages/signin_screen.dart';
 import 'package:sihati/features/dashboard/presentation/pages/dashboard_screen.dart';
+import 'package:sihati/features/order/presentation/pages/addorder_attributes_screen.dart';
 import 'package:sihati/features/order/presentation/pages/addorder_screen.dart';
 import 'package:sihati/features/products/presentation/pages/add_product_screen.dart';
 import 'package:sihati/features/order/presentation/pages/select_orderitem_screen.dart';
@@ -28,6 +29,8 @@ class Routes {
   static const String addorder = '/addorder';
   //! select orderitem
   static const String selectorderitem = '/selectorderitem';
+  //! add attribute
+  static const String addattribute = '/addatribute';
   
 
   static final GoRouter route = GoRouter(
@@ -41,7 +44,8 @@ class Routes {
       GoRoute(path: dashboard, builder: (context, state) =>  DashboardScreen()),
       GoRoute(path: addProduct, builder: (context, state) =>  AddProductScreen()),
       GoRoute(path: addorder,builder: (context, state) => AddOrderScreen()),
-      GoRoute(path: selectorderitem, builder: (context, state) =>  SelectOrderItemScreen())
+      GoRoute(path: selectorderitem, builder: (context, state) =>  SelectOrderItemScreen()),
+      GoRoute(path: addattribute,builder: (context, state) => AddorderAttributesScreen(),)
     ],
   );
 }
