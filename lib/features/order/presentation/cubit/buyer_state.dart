@@ -1,12 +1,12 @@
-class BuyerState {}
+class PersonState {}
 
-class BuyerInitial extends BuyerState{}
+class PersonInitial extends PersonState{}
 
-class BuyerLoading extends BuyerState{}
+class PersonLoading extends PersonState{}
 
-class BuyerLoaded extends BuyerState{}
+class PersonLoaded extends PersonState{}
 
-class BuyerFailure extends BuyerState{
+class PersonFailure extends PersonState{
   final String message;
-    BuyerFailure(this.message);  
+    PersonFailure(this.message);  
 }

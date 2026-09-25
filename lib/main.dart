@@ -8,7 +8,7 @@ import 'package:sihati/core/routes/routes.dart';
 import 'package:sihati/core/services/local/shared_pref.dart';
 import 'package:sihati/core/utils/themes.dart';
 import 'package:sihati/features/auth/presentation/cubit/authcubit.dart';
-import 'package:sihati/features/order/presentation/cubit/buyer_cubit.dart';
+import 'package:sihati/features/order/presentation/cubit/person_cubit.dart';
 import 'package:sihati/features/order/presentation/cubit/order_cubit.dart';
 import 'package:sihati/features/products/presentation/cubit/product_cubit.dart';
 import 'package:sihati/firebase_options.dart';
@@ -31,7 +31,7 @@ void main() async {
           BlocProvider(create: (context) => AuthCubit()),
           BlocProvider(create: (context) => ProductCubit()),
           BlocProvider(create: (context) => OrderCubit()),
-          BlocProvider(create: (context) => BuyerCubit()),
+          BlocProvider(create: (context) => PersonCubit()),
         ],
         child: DevicePreview(
           enabled: kDebugMode,

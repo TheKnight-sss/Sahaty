@@ -1,12 +1,13 @@
-class BuyerModel {
-  final String? id;
-  final String name;
+import 'package:sihati/features/order/models/person_model.dart';
+
+class BuyerModel extends PersonModel {
   final String location;
 
   BuyerModel({
-    this.id,
-    required this.name,
+    super.id,
+    required super.name,
     required this.location,
+    required super.phone,
   });
 
   factory BuyerModel.fromJson(Map<String, dynamic> json) {
@@ -14,13 +15,11 @@ class BuyerModel {
       id: json['id'],
       name: json['name'] ?? '',
       location: json['location'] ?? '',
+      phone: json['phone'] ?? '',
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'location': location,
-    };
+    return {'name': name, 'location': location, 'phone': phone};
   }
 }

@@ -19,7 +19,6 @@ class OrderCubit extends Cubit<OrderState> {
   final locationcontroller = TextEditingController();
   final repcontroller = TextEditingController();
   final formkey = GlobalKey<FormState>();
-  
 
   //!addProductToOrder//////////////////////////////////////
   void addProductToOrder(ProductModel product) {
