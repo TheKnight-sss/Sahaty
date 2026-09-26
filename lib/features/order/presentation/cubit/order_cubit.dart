@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sihati/features/order/models/order_item_model.dart';
 import 'package:sihati/features/order/models/order_model.dart';
+import 'package:sihati/features/order/models/rep_model.dart';
 import 'package:sihati/features/order/presentation/cubit/order_state.dart';
 import 'package:sihati/features/products/models/product_model.dart';
 
@@ -14,7 +15,7 @@ class OrderCubit extends Cubit<OrderState> {
   List<OrderModel> doneOrder = [];
 
   OrderModel? orderModel;
-  
+
   final buyercontroller = TextEditingController();
   final locationcontroller = TextEditingController();
   final repcontroller = TextEditingController();
@@ -54,6 +55,20 @@ class OrderCubit extends Cubit<OrderState> {
     );
 
     emit(OrderItemsUpdated());
+  }
+
+  //!updateOrderRep////////////////////////////
+  Future<void> updateOrderRep(OrderModel order, RepModel rep) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('Orders')
+          .doc(order.id)
+          .update({'rep': rep, 'status': OrderStatus.onDelivering.name});
+
+      await getOrder();
+    } catch (e) {
+      emit(OrderFailure(e.toString()));
+    }
   }
 
   //!updateOrderTotalPrice//////////////////////////////////////////////
@@ -146,7 +161,7 @@ class OrderCubit extends Cubit<OrderState> {
       emit(OrderLoading());
       final snapshot = await FirebaseFirestore.instance
           .collection('Orders')
-          .orderBy('createdAt',descending: true)
+          .orderBy('createdAt', descending: true)
           .get();
 
       orderList = snapshot.docs.map((doc) {

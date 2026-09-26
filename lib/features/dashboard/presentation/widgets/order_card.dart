@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:sihati/components/buttons/custom_button.dart';
@@ -8,8 +9,12 @@ import 'package:sihati/core/utils/appcolors.dart';
 import 'package:sihati/core/utils/style.dart';
 import 'package:sihati/features/dashboard/presentation/widgets/notes.dart';
 import 'package:sihati/features/order/models/order_model.dart';
+import 'package:sihati/features/order/models/rep_model.dart';
+import 'package:sihati/features/order/presentation/cubit/buyer_state.dart';
+import 'package:sihati/features/order/presentation/cubit/order_cubit.dart';
+import 'package:sihati/features/order/presentation/cubit/person_cubit.dart';
 
-class OrderCard extends StatelessWidget {
+class OrderCard extends StatefulWidget {
   const OrderCard({
     super.key,
     this.name,
@@ -19,7 +24,7 @@ class OrderCard extends StatelessWidget {
     this.rep,
     this.ontap,
     required this.status,
-    required this.onPressed,
+    this.updaterep,
   });
 
   final String? name;
@@ -28,11 +33,19 @@ class OrderCard extends StatelessWidget {
   final String? time;
   final String? rep;
   final VoidCallback? ontap;
-  final VoidCallback onPressed;
+  final void Function(RepModel rep)? updaterep;
   final OrderStatus status;
+
+  @override
+  State<OrderCard> createState() => _OrderCardState();
+}
+
+class _OrderCardState extends State<OrderCard> {
+  
+  bool assign = false;
   @override
   Widget build(BuildContext context) {
-    var cost = price.toString();
+    var cost = widget.price.toString();
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
@@ -52,15 +65,15 @@ class OrderCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                Text(name ?? "", style: Style.tab),
+                Text(widget.name ?? "", style: Style.tab),
                 Spacer(),
-                if (status == OrderStatus.onDelivering)
+                if (widget.status == OrderStatus.onDelivering)
                   Notes(
                     text: "OnDelivering",
                     select: false,
                     color: Appcolors.splashup,
                   )
-                else if (status == OrderStatus.delivered)
+                else if (widget.status == OrderStatus.delivered)
                   Notes(text: "Done", select: false, color: Appcolors.slider)
                 else
                   Notes(
@@ -79,11 +92,11 @@ class OrderCard extends StatelessWidget {
                   width: 15,
                 ),
                 Gap(3),
-                Text(loc ?? "", style: TextStyle(color: Colors.grey)),
+                Text(widget.loc ?? "", style: TextStyle(color: Colors.grey)),
                 Gap(2),
                 Icon(Icons.circle, size: 2.4, color: Colors.grey),
                 Gap(2),
-                Text(time ?? "", style: TextStyle(color: Colors.grey)),
+                Text(widget.time ?? "", style: TextStyle(color: Colors.grey)),
               ],
             ),
             Row(
@@ -123,70 +136,138 @@ class OrderCard extends StatelessWidget {
                   top: BorderSide(color: Colors.grey.shade300, width: 1),
                 ),
               ),
-              child: Column(
-                children: [
-                  Gap(10),
-                  if (status == OrderStatus.pending)
-                    CustomButton(
-                      onPressed: onPressed,
-                      color1: Appcolors.l1,
-                      color2: Appcolors.l2,
-                      color3: Appcolors.l2,
-                      child: Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+              child: BlocBuilder<PersonCubit, PersonState>(
+                builder: (context, state) {
+                  var cubit = context.read<PersonCubit>();
+                  return Column(
+                    children: [
+                      Gap(10),
+                      if(widget.status == OrderStatus.pending)
+                        assign == false
+                            ? CustomButton(
+                                onPressed: () {
+                                  setState(() {
+                                    assign = true;
+                                  });
+                                },
+                                color1: Appcolors.l1,
+                                color2: Appcolors.l2,
+                                color3: Appcolors.l2,
+                                child: Center(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(
+                                        Icons.person_2_outlined,
+                                        color: Colors.white,
+                                      ),
+                                      Gap(5),
+                                      Text(
+                                        "Assign Rep For Delivery",
+                                        style: TextStyle(color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            :   Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Choose Rep :",
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                  SizedBox(
+                                    height: 100,
+                                    child: GridView.builder(
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 2,
+                                            childAspectRatio: 6,
+                                            mainAxisSpacing: 3,
+                                            crossAxisSpacing: 5,
+                                          ),
+                                      itemCount: cubit.repsList.length,
+                                      itemBuilder: (context, index) {
+                                        var rep = cubit.repsList[index];
+                                        return GestureDetector(
+                                          onTap: () {
+                                            widget.updaterep?.call(rep);
+                                          },
+                                          child: Notes(
+                                            text: rep.name,
+                                            select: false,
+                                            color: Appcolors.splashup,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      TextButton(onPressed: (){setState(() {
+                                        assign = false;
+                                      });}, child: Text("cancle",))
+                                    ],
+                                  )
+                                ],
+                              )
+                      else if (widget.status == OrderStatus.onDelivering)
+                        Row(
                           children: [
-                            Icon(Icons.person_2_outlined,color: Colors.white,),
+                            Icon(
+                              Icons.circle,
+                              color: Appcolors.login,
+                              size: 12,
+                            ),
                             Gap(5),
-                            Text("Assign Rep For Delivery",style: TextStyle(color: Colors.white),),
+                            Text(
+                              "Rep".tr(),
+                              style: TextStyle(
+                                color: Colors.black.withValues(alpha: .7),
+                              ),
+                            ),
+                            Gap(5),
+                            Text(":"),
+                            Gap(5),
+                            Text(widget.rep.toString()),
+                            Spacer(),
+                            GestureDetector(
+                              //!update to delivered////////////////////////////////
+                              onTap: widget.ontap,
+                              child: Notes(
+                                text: "تم تأكيد الإستلام".tr(),
+                                select: true,
+                                color: Appcolors.slider,
+                              ),
+                            ),
+                          ],
+                        )
+                      else
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.circle,
+                              color: Appcolors.login,
+                              size: 12,
+                            ),
+                            Gap(5),
+                            Text(
+                              "Rep".tr(),
+                              style: TextStyle(
+                                color: Colors.black.withValues(alpha: .7),
+                              ),
+                            ),
+                            Gap(5),
+                            Text(":"),
+                            Gap(5),
+                            Text(widget.rep.toString()),
                           ],
                         ),
-                      ),
-                    )
-                  else if (status == OrderStatus.onDelivering)
-                    Row(
-                      children: [
-                        Icon(Icons.circle, color: Appcolors.login, size: 12),
-                        Gap(5),
-                        Text(
-                          "Rep".tr(),
-                          style: TextStyle(
-                            color: Colors.black.withValues(alpha: .7),
-                          ),
-                        ),
-                        Gap(5),
-                        Text(":"),
-                        Gap(5),
-                        Text(rep.toString()),
-                        Spacer(),
-                        GestureDetector(
-                          onTap: ontap,
-                          child: Notes(
-                            text: "تم تأكيد الإستلام".tr(),
-                            select: true,
-                            color: Appcolors.slider,
-                          ),
-                        ),
-                      ],
-                    )
-                  else
-                    Row(
-                      children: [
-                        Icon(Icons.circle, color: Appcolors.login, size: 12),
-                        Gap(5),
-                        Text(
-                          "Rep".tr(),
-                          style: TextStyle(
-                            color: Colors.black.withValues(alpha: .7),
-                          ),
-                        ),
-                        Gap(5),
-                        Text(":"),
-                        Gap(5),
-                        Text(rep.toString()),
-                      ],
-                    ),
-                ],
+                    ],
+                  );
+                },
               ),
             ),
           ],

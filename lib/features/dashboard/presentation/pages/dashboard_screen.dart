@@ -13,6 +13,7 @@ import 'package:sihati/features/dashboard/presentation/widgets/order_card.dart';
 import 'package:sihati/features/dashboard/presentation/widgets/tab_button.dart';
 import 'package:sihati/features/order/presentation/cubit/order_cubit.dart';
 import 'package:sihati/features/order/presentation/cubit/order_state.dart';
+import 'package:sihati/features/order/presentation/cubit/person_cubit.dart';
 import 'package:sihati/features/products/presentation/cubit/product_cubit.dart';
 import 'package:sihati/features/products/presentation/cubit/product_state.dart';
 
@@ -52,8 +53,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     super.initState();
 
-      context.read<ProductCubit>().getProduct();
-      context.read<OrderCubit>().getOrder();
+    context.read<ProductCubit>().getProduct();
+    context.read<OrderCubit>().getOrder();
+    context.read<PersonCubit>().getReps();
   }
 
   @override
@@ -125,7 +127,6 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     setState(() {
                       isSelected = "Orders";
                     });
-                    
                   },
                 ),
               ],
@@ -262,11 +263,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                 time: formdate.toString(),
                                 rep: order.rep,
                                 status: order.status,
-                                ontap: () {                                  
+                                ontap: () {
                                   context.read<OrderCubit>().updateState(order);
                                 },
-                                onPressed: () {
-                                  
+                                updaterep: (rep) {
+                                 context.read<OrderCubit>().updateOrderRep(order, rep);
                                 },
                               );
                             },

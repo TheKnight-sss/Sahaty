@@ -6,11 +6,9 @@ import 'package:gap/gap.dart';
 import 'package:sihati/core/constants/app_images.dart';
 import 'package:sihati/core/utils/style.dart';
 import 'package:sihati/features/order/models/buyer_model.dart';
-import 'package:sihati/features/order/models/rep_model.dart';
 import 'package:sihati/features/order/presentation/cubit/buyer_state.dart';
 import 'package:sihati/features/order/presentation/cubit/order_cubit.dart';
 import 'package:sihati/features/order/presentation/cubit/person_cubit.dart';
-import 'package:sihati/features/order/presentation/widgets/order_field.dart';
 import 'package:sihati/features/products/presentation/widgets/head.dart';
 
 class OrderInformationCard extends StatefulWidget {
