@@ -77,11 +77,11 @@ class HeadTitle extends StatelessWidget {
                     ),
                     DetailedTab(
                       txt:
-                          "${orders.where((orders) => orders.status == OrderStatus.pending).length}",
+                          "${orders.where((orders) => orders.status == OrderStatus.onDelivering).length}",
                       subtitle: "Delivering",
                     ),
                     DetailedTab(
-                      txt: "${orders.where((orders) => orders.status == OrderStatus.onDelivering).length}",
+                      txt: "${orders.where((orders) => orders.status == OrderStatus.pending).length}",
                       subtitle: "Pending",
                     )
                   ],

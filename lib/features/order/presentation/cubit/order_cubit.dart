@@ -63,7 +63,7 @@ class OrderCubit extends Cubit<OrderState> {
       await FirebaseFirestore.instance
           .collection('Orders')
           .doc(order.id)
-          .update({'rep': rep, 'status': OrderStatus.onDelivering.name});
+          .update({'rep': rep.name, 'status': OrderStatus.onDelivering.name});
 
       await getOrder();
     } catch (e) {
