@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:sihati/core/constants/app_images.dart';
+import 'package:sihati/core/routes/navigation.dart';
+import 'package:sihati/core/routes/routes.dart';
 import 'package:sihati/core/utils/appcolors.dart';
 import 'package:sihati/core/utils/style.dart';
 import 'package:sihati/features/dashboard/presentation/widgets/drawer_list.dart';
@@ -192,26 +194,46 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       if (state is ProductSuccess) {
                         final products = state.products;
 
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                        return BlocBuilder<OrderCubit, OrderState>(
+                          builder: (context, state) {
+                            final orderCubit = context.read<OrderCubit>();
+                            
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                              ),
 
-                          child: ListView.separated(
-                            itemCount: products.length,
+                              child: ListView.separated(
+                                itemCount: products.length,
 
-                            separatorBuilder: (context, index) {
-                              return const Gap(10);
-                            },
+                                separatorBuilder: (context, index) {
+                                  return const Gap(10);
+                                },
 
-                            itemBuilder: (context, index) {
-                              final product = products[index];
+                                itemBuilder: (context, index) {
+                                  final product = products[index];
+                                  final productondelivery = orderCubit.getProductOnDelivery(product.name);
 
-                              return InventoryCard(
-                                color: getProductColor(product.color),
-                                name: product.name ?? '',
-                                remain: product.maxquan ?? 0,
-                              );
-                            },
-                          ),
+                                  return GestureDetector(
+                                    onTap: () {
+                                      pushTo(
+                                        context,
+                                        Routes.productdetails,
+                                        extra: product,
+                                      );
+                                    },
+                                    child: InventoryCard(
+                                      color: getProductColor(product.color),
+                                      name: product.name ?? '',
+                                      remain: (product.maxquan ?? 0) - productondelivery ,
+                                      maxquan: product.maxquan?.toInt() ?? 0,
+                                      ondeliverying: productondelivery.toInt()
+                                    ),
+                                  );
+                                },
+                              ),
+                            );
+                          },
                         );
                       }
 
@@ -267,7 +289,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   context.read<OrderCubit>().updateState(order);
                                 },
                                 updaterep: (rep) {
-                                 context.read<OrderCubit>().updateOrderRep(order, rep);
+                                  context.read<OrderCubit>().updateOrderRep(
+                                    order,
+                                    rep,
+                                  );
                                 },
                               );
                             },

@@ -8,11 +8,13 @@ import 'package:sihati/core/utils/style.dart';
 
 class InventoryCard extends StatelessWidget {
   const InventoryCard({
-    super.key, required this.name, required this.remain, required this.color,
+    super.key, required this.name, required this.remain, required this.color, required this.maxquan, required this.ondeliverying,
   });
   final String name;
   final double remain;
   final Color color;
+  final int maxquan;
+  final int ondeliverying;
 
   @override
   Widget build(BuildContext context) {
@@ -84,13 +86,13 @@ class InventoryCard extends StatelessWidget {
               Column(
                 children: [
                   Text("Total".tr(),style: Style.tab.copyWith(fontSize: 14,color: Appcolors.slcard),),
-                  Text("450kg",style: Style.tab,)
+                  Text(maxquan.toString(),style: Style.tab,)
                 ],
               ),
               Column(
                 children: [
                   Text("On Delivery".tr(),style: Style.tab.copyWith(fontSize: 14,color: Appcolors.slcard)),
-                  Text("30kg",style: Style.tab.copyWith(color: Appcolors.l2),)
+                  Text(ondeliverying.toString(),style: Style.tab.copyWith(color: Appcolors.l2),)
                 ],
               ),
               Column(

@@ -5,8 +5,10 @@ import 'package:sihati/features/auth/presentation/pages/signin_screen.dart';
 import 'package:sihati/features/dashboard/presentation/pages/dashboard_screen.dart';
 import 'package:sihati/features/order/presentation/pages/addorder_attributes_screen.dart';
 import 'package:sihati/features/order/presentation/pages/addorder_screen.dart';
+import 'package:sihati/features/products/models/product_model.dart';
 import 'package:sihati/features/products/presentation/pages/add_product_screen.dart';
 import 'package:sihati/features/order/presentation/pages/select_orderitem_screen.dart';
+import 'package:sihati/features/products/presentation/pages/product_details_screen.dart';
 import 'package:sihati/features/splash/splash_screen.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -25,27 +27,39 @@ class Routes {
   static const String dashboard = '/dashboard';
   //! add product
   static const String addProduct = '/addProduct';
+  //! product details
+  static const String productdetails = '/productdetails';
   //! add order
   static const String addorder = '/addorder';
   //! select orderitem
   static const String selectorderitem = '/selectorderitem';
   //! add attribute
   static const String addattribute = '/addatribute';
-  
 
   static final GoRouter route = GoRouter(
     navigatorKey: navigatorKey,
     routes: [
       GoRoute(path: splash, builder: (context, state) => const SplashScreen()),
-      GoRoute(path: login, builder: (context, state)  {
-        return LoginScreen();
-      }),
-      GoRoute(path: register, builder: (context, state) =>  SigninScreen()),
-      GoRoute(path: dashboard, builder: (context, state) =>  DashboardScreen()),
-      GoRoute(path: addProduct, builder: (context, state) =>  AddProductScreen()),
-      GoRoute(path: addorder,builder: (context, state) => AddOrderScreen()),
-      GoRoute(path: selectorderitem, builder: (context, state) =>  SelectOrderItemScreen()),
-      GoRoute(path: addattribute,builder: (context, state) => AddorderAttributesScreen(),)
+      GoRoute(path: login, builder: (context, state) => LoginScreen()),
+      GoRoute(path: register, builder: (context, state) => SigninScreen()),
+      GoRoute(path: dashboard, builder: (context, state) => DashboardScreen()),
+      GoRoute(
+        path: addProduct,
+        builder: (context, state) => AddProductScreen(),
+      ),
+      GoRoute(path: addorder, builder: (context, state) => AddOrderScreen()),
+      GoRoute(
+        path: selectorderitem,
+        builder: (context, state) => SelectOrderItemScreen(),
+      ),
+      GoRoute(
+        path: addattribute,
+        builder: (context, state) => AddorderAttributesScreen(),
+      ),
+      GoRoute(path: productdetails, builder: (context, state) {
+        var product = state.extra as ProductModel;
+        return ProductDetailsScreen(product: product);
+      })
     ],
   );
 }

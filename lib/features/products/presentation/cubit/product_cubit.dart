@@ -78,4 +78,10 @@ class ProductCubit extends Cubit<ProductState> {
       emit(ProductFailure(e.toString()));
     }
   }
+
+  void resetProduct(){
+    productnameController.clear();
+    quantityController.clear();
+    priceController.clear();
+  }
 }

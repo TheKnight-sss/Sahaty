@@ -32,7 +32,7 @@ class DetailedTab extends StatelessWidget {
             Text(
               subtitle.tr(),
               textAlign: TextAlign.center,
-              style: TextStyle(color: Color(0xFFBFDBFE), fontSize: 14),
+              style: TextStyle(color: Color(0xFFBFDBFE), fontSize: 12),
             ),
           ],
         ),

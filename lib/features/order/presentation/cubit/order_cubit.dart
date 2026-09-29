@@ -176,6 +176,22 @@ class OrderCubit extends Cubit<OrderState> {
       emit(OrderFailure(e.toString()));
     }
   }
+
+  //!getOrderonDelivering/////////////////////////////
+  double getProductOnDelivery(String? productname) {
+    double total = 0;
+    for (final order in orderList) {
+      if (order.status == OrderStatus.onDelivering) {
+        for (final item in order.orderlist ?? []) {
+          if (item.name == productname) {
+            total += item.quantity ?? 0;
+          }
+        }
+      }
+    }
+
+    return total;
+  }
   //!resetOrder////////////////////////////////////////
 
   void resetOrder() {

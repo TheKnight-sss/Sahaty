@@ -29,6 +29,14 @@ class _AddProductScreenState extends State<AddProductScreen> {
     {'name': 'Purple', 'color': Colors.purple},
     {'name': 'Pink', 'color': Colors.pink},
   ];
+  
+  @override
+  void initState() {
+    super.initState();
+
+    context.read<ProductCubit>().resetProduct();
+  }
+
   @override
   Widget build(BuildContext context) {
     var cubit = context.read<ProductCubit>();
