@@ -4,11 +4,10 @@ class ProductModel{
    final String? name;
    final double? price;
    final double? maxquan;
-   final String? selled;
    final String? unit;
    final String? color;
 
-    ProductModel({this.id, this.name, this.price, this.selled, this.color, this.unit, this.maxquan});
+    ProductModel({this.id, this.name, this.price, this.color, this.unit, this.maxquan,});
 
     factory ProductModel.fromJson(Map<String, dynamic> json){
         return ProductModel(
@@ -17,7 +16,6 @@ class ProductModel{
             price: json['price'],
             maxquan: json['maxquan'],
             color: json['color'],
-            selled: json['selled'],
             unit: json['unit']
         );
     }
@@ -29,9 +27,7 @@ class ProductModel{
             'price': price,
             'maxquan': maxquan,
             'color':color,
-            'selled': selled,
             'unit': unit,
-            "remaining": (maxquan != null && selled != null) ? (maxquan! - double.parse(selled!)) : null
         };
     }
 }

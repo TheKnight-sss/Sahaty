@@ -8,16 +8,36 @@ import 'package:sihati/core/utils/style.dart';
 
 class InventoryCard extends StatelessWidget {
   const InventoryCard({
-    super.key, required this.name, required this.remain, required this.color, required this.maxquan, required this.ondeliverying,
+    super.key,
+    required this.name,
+    required this.remain,
+    required this.color,
+    required this.maxquan,
+    required this.ondeliverying,
+    required this.max,
+    required this.current,
   });
   final String name;
+
+  // Remaining inventory
   final double remain;
+
   final Color color;
+
+  // Current total inventory after delivered orders are removed
   final int maxquan;
+
+  // Quantity currently on delivery
   final int ondeliverying;
 
+  // Current total inventory
+  final double max;
+
+  // Quantity currently on delivery
+  final double current;
   @override
   Widget build(BuildContext context) {
+    final percentage = max > 0 ? current / max : 0;
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -39,15 +59,10 @@ class InventoryCard extends StatelessWidget {
               Row(
                 children: [
                   CircleAvatar(
-                    backgroundColor:color.withValues(
-                      alpha: .15,
-                    ),
+                    backgroundColor: color.withValues(alpha: .15),
                     child: SvgPicture.asset(
                       AppImages.logo,
-                      colorFilter: ColorFilter.mode(
-                        color,
-                        BlendMode.srcIn,
-                      ),
+                      colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
                     ),
                   ),
                   Gap(5),
@@ -60,12 +75,15 @@ class InventoryCard extends StatelessWidget {
                 width: 60,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(50),
-                  color: Appcolors.slider.withValues(alpha: .15),
+                  color:percentage>= .7 ?Appcolors.slider.withValues(alpha: .15) :percentage>= .3 ?Colors.orange.withValues(alpha: .15) : Colors.red.withValues(alpha: .15),
                 ),
                 child: Center(
                   child: Text(
-                    "Ok".tr(),
-                    style: TextStyle(color: Appcolors.slider,fontWeight:FontWeight.w700 ),
+                    percentage>= .7 ?"Ok" :percentage>= .3 ?"Good" : "Low",
+                    style: TextStyle(
+                      color: percentage>= .7 ?Appcolors.slider :percentage>= .3 ?Colors.orange : Colors.red,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ),
@@ -74,8 +92,9 @@ class InventoryCard extends StatelessWidget {
           Gap(8),
           LinearProgressIndicator(
             minHeight: 8,
-            value: 0 / 2000,
-            backgroundColor: Appcolors.slider,
+            value: max > 0 ? current / max : 0,
+            backgroundColor: Appcolors.slider.withValues(alpha: .15),
+            valueColor: AlwaysStoppedAnimation<Color>(percentage>= .7 ?Appcolors.slider :percentage>= .3 ?Colors.orange : Colors.red ),
             borderRadius: BorderRadius.circular(16),
           ),
           Gap(10),
@@ -85,24 +104,48 @@ class InventoryCard extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  Text("Total".tr(),style: Style.tab.copyWith(fontSize: 14,color: Appcolors.slcard),),
-                  Text(maxquan.toString(),style: Style.tab,)
+                  Text(
+                    "Total".tr(),
+                    style: Style.tab.copyWith(
+                      fontSize: 14,
+                      color: Appcolors.slcard,
+                    ),
+                  ),
+                  Text(maxquan.toString(), style: Style.tab),
                 ],
               ),
               Column(
                 children: [
-                  Text("On Delivery".tr(),style: Style.tab.copyWith(fontSize: 14,color: Appcolors.slcard)),
-                  Text(ondeliverying.toString(),style: Style.tab.copyWith(color: Appcolors.l2),)
+                  Text(
+                    "On Delivery".tr(),
+                    style: Style.tab.copyWith(
+                      fontSize: 14,
+                      color: Appcolors.slcard,
+                    ),
+                  ),
+                  Text(
+                    ondeliverying.toString(),
+                    style: Style.tab.copyWith(color: Appcolors.l2),
+                  ),
                 ],
               ),
               Column(
                 children: [
-                  Text("Remaining".tr(),style: Style.tab.copyWith(fontSize: 14,color: Appcolors.slcard),),
-                  Text(remain.toString(),style: Style.tab.copyWith(color: Appcolors.slider),)
+                  Text(
+                    "Remaining".tr(),
+                    style: Style.tab.copyWith(
+                      fontSize: 14,
+                      color: Appcolors.slcard,
+                    ),
+                  ),
+                  Text(
+                    remain.toString(),
+                    style: Style.tab.copyWith(color: Appcolors.slider),
+                  ),
                 ],
-              )
+              ),
             ],
-          )
+          ),
         ],
       ),
     );

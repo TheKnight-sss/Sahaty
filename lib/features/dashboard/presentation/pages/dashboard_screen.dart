@@ -197,7 +197,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         return BlocBuilder<OrderCubit, OrderState>(
                           builder: (context, state) {
                             final orderCubit = context.read<OrderCubit>();
-                            
+
                             return Padding(
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 10,
@@ -212,7 +212,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                                 itemBuilder: (context, index) {
                                   final product = products[index];
-                                  final productondelivery = orderCubit.getProductOnDelivery(product.name);
+                                  final max = product.maxquan ?? 0;
+
+                                  final onDelivery = orderCubit
+                                      .getProductOnDelivery(product.name);
+
+                                  final delivered = orderCubit
+                                      .getProductDelivered(product.name);
+
+                                  final currentTotal = max - delivered;
+
+                                  final remaining = currentTotal - onDelivery;
 
                                   return GestureDetector(
                                     onTap: () {
@@ -223,11 +233,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       );
                                     },
                                     child: InventoryCard(
-                                      color: getProductColor(product.color),
                                       name: product.name ?? '',
-                                      remain: (product.maxquan ?? 0) - productondelivery ,
-                                      maxquan: product.maxquan?.toInt() ?? 0,
-                                      ondeliverying: productondelivery.toInt()
+                                      color: getProductColor(product.color),
+                                      maxquan: currentTotal.toInt(),
+                                      ondeliverying: onDelivery.toInt(),
+                                      max:max,
+                                      current: currentTotal,
+                                      remain: remaining,
                                     ),
                                   );
                                 },

@@ -178,10 +178,27 @@ class OrderCubit extends Cubit<OrderState> {
   }
 
   //!getOrderonDelivering/////////////////////////////
-  double getProductOnDelivery(String? productname) {
+
+  double getProductOnDelivery(String? productName) {
+  double total = 0;
+
+  for (final order in orderList) {
+    if (order.status == OrderStatus.onDelivering) {
+      for (final item in order.orderlist ?? []) {
+        if (item.name == productName) {
+          total += item.quantity ?? 0;
+        }
+      }
+    }
+  }
+
+  return total;
+}
+ //!getProductCurrent\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+  double getProductCurrent(String? productname) {
     double total = 0;
     for (final order in orderList) {
-      if (order.status == OrderStatus.onDelivering) {
+      if (order.status == OrderStatus.onDelivering || order.status == OrderStatus.delivered  ) {
         for (final item in order.orderlist ?? []) {
           if (item.name == productname) {
             total += item.quantity ?? 0;
@@ -192,6 +209,22 @@ class OrderCubit extends Cubit<OrderState> {
 
     return total;
   }
+//!getProductDelivered\\\\\\\\\\\\\\
+  double getProductDelivered(String? productName) {
+  double total = 0;
+
+  for (final order in orderList) {
+    if (order.status == OrderStatus.delivered) {
+      for (final item in order.orderlist ?? []) {
+        if (item.name == productName) {
+          total += item.quantity ?? 0;
+        }
+      }
+    }
+  }
+
+  return total;
+}
   //!resetOrder////////////////////////////////////////
 
   void resetOrder() {
