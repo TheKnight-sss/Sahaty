@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:sihati/core/constants/app_images.dart';
 import 'package:sihati/core/utils/appcolors.dart';
 import 'package:sihati/core/utils/style.dart';
+import 'package:sihati/features/dashboard/presentation/widgets/capacatiy.dart';
 
 class InventoryCard extends StatelessWidget {
   const InventoryCard({
@@ -15,7 +16,7 @@ class InventoryCard extends StatelessWidget {
     required this.maxquan,
     required this.ondeliverying,
     required this.max,
-    required this.current,
+    required this.current, required this.parcolor,
   });
   final String name;
 
@@ -35,6 +36,8 @@ class InventoryCard extends StatelessWidget {
 
   // Quantity currently on delivery
   final double current;
+
+  final Color parcolor;
   @override
   Widget build(BuildContext context) {
     final percentage = max > 0 ? current / max : 0;
@@ -70,30 +73,14 @@ class InventoryCard extends StatelessWidget {
                 ],
               ),
               Spacer(),
-              Container(
-                padding: EdgeInsets.all(5),
-                width: 60,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(50),
-                  color:percentage>= .7 ?Appcolors.slider.withValues(alpha: .15) :percentage>= .3 ?Colors.orange.withValues(alpha: .15) : Colors.red.withValues(alpha: .15),
-                ),
-                child: Center(
-                  child: Text(
-                    percentage>= .7 ?"Ok" :percentage>= .3 ?"Good" : "Low",
-                    style: TextStyle(
-                      color: percentage>= .7 ?Appcolors.slider :percentage>= .3 ?Colors.orange : Colors.red,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-              ),
+              Capacatiy(percentage: percentage),
             ],
           ),
           Gap(8),
           LinearProgressIndicator(
             minHeight: 8,
             value: max > 0 ? current / max : 0,
-            backgroundColor: Appcolors.slider.withValues(alpha: .15),
+            backgroundColor: parcolor,
             valueColor: AlwaysStoppedAnimation<Color>(percentage>= .7 ?Appcolors.slider :percentage>= .3 ?Colors.orange : Colors.red ),
             borderRadius: BorderRadius.circular(16),
           ),

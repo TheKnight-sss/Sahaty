@@ -34,5 +34,9 @@
   "السعر":"Cost",
   "المندوب":"Rep",
   "تم تأكيد الإستلام":" Confirm Delivery",
-  "إضافة طلب":"Add Order"
+  "إضافة طلب":"Add Order",
+  "الكمية المتبقية":"Remaining Quantity",
+  "تعديل":"Edit",
+  "عرض":"View",
+  "متبقي":"Remain"
 }

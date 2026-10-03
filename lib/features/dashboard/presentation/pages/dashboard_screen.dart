@@ -240,6 +240,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       max:max,
                                       current: currentTotal,
                                       remain: remaining,
+                                      parcolor: const Color(0xFFF5F5F6)
                                     ),
                                   );
                                 },
