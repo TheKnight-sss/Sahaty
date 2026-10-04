@@ -281,6 +281,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               ),
               Gap(20),
               Container(
+padding:EdgeInsets.all(10)
                 decoration: BoxDecoration(
                   boxShadow:[
                     BoxShadow(blurRadius: 5, color: Colors.black.withValues(alpha: .1), offset: Offset(0, 3))
