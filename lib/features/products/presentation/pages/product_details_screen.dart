@@ -288,6 +288,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(20),
                 ),
+                
               )
             ],
           ),
