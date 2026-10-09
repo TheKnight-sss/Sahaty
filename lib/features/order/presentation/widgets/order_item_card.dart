@@ -31,26 +31,26 @@ class OrderItemCard extends StatefulWidget {
 }
 
 class _OrderItemCardState extends State<OrderItemCard> {
-  late final TextEditingController orderproductquantitycontroller;
+  late final TextEditingController orderproductcapacityController;
 
   @override
   void initState() {
     super.initState();
 
-    orderproductquantitycontroller = TextEditingController(
+    orderproductcapacityController = TextEditingController(
       text: widget.orderproductquantity?.toString() ?? '',
     );
   }
 
   @override
   void dispose() {
-    orderproductquantitycontroller.dispose();
+    orderproductcapacityController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final quantity = double.tryParse(orderproductquantitycontroller.text) ?? 0;
+    final quantity = double.tryParse(orderproductcapacityController.text) ?? 0;
 
     final totalprice = (widget.orderproductprice ?? 0) * quantity;
 
@@ -133,7 +133,7 @@ class _OrderItemCardState extends State<OrderItemCard> {
               Gap(5),
               Expanded(
                 child: TextField(
-                  controller: orderproductquantitycontroller,
+                  controller: orderproductcapacityController,
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                     hintText: 'Enter quantity',

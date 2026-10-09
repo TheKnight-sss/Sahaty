@@ -212,7 +212,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                                 itemBuilder: (context, index) {
                                   final product = products[index];
-                                  final max = product.maxquan ?? 0;
+                                  final max = product.capacity ?? 0;
 
                                   final onDelivery = orderCubit
                                       .getProductOnDelivery(product.name);
@@ -220,7 +220,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                   final delivered = orderCubit
                                       .getProductDelivered(product.name);
 
-                                  final currentTotal = max - delivered;
+                                  final currentTotal = (product.quantity??0).toDouble() - delivered;
 
                                   final remaining = currentTotal - onDelivery;
 
@@ -235,7 +235,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     child: InventoryCard(
                                       name: product.name ?? '',
                                       color: getProductColor(product.color),
-                                      maxquan: currentTotal.toInt(),
+                                      capacity: currentTotal.toInt(),
                                       ondeliverying: onDelivery.toInt(),
                                       max:max,
                                       current: currentTotal,
@@ -251,8 +251,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       }
 
                       if (state is ProductFailure) {
-                        return const Center(
-                          child: Text("Something went wrong"),
+                        return Center(
+                          child: Text(state.error),
                         );
                       }
 

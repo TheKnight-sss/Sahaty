@@ -13,7 +13,7 @@ class InventoryCard extends StatelessWidget {
     required this.name,
     required this.remain,
     required this.color,
-    required this.maxquan,
+    required this.capacity,
     required this.ondeliverying,
     required this.max,
     required this.current, required this.parcolor,
@@ -26,7 +26,7 @@ class InventoryCard extends StatelessWidget {
   final Color color;
 
   // Current total inventory after delivered orders are removed
-  final int maxquan;
+  final int capacity;
 
   // Quantity currently on delivery
   final int ondeliverying;
@@ -98,7 +98,7 @@ class InventoryCard extends StatelessWidget {
                       color: Appcolors.slcard,
                     ),
                   ),
-                  Text(maxquan.toString(), style: Style.tab),
+                  Text(capacity.toString(), style: Style.tab),
                 ],
               ),
               Column(

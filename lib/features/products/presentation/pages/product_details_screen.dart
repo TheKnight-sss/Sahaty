@@ -4,11 +4,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:sihati/core/constants/app_images.dart';
+import 'package:sihati/core/routes/navigation.dart';
+import 'package:sihati/core/routes/routes.dart';
 import 'package:sihati/core/utils/appcolors.dart';
 import 'package:sihati/core/utils/style.dart';
 import 'package:sihati/features/dashboard/presentation/widgets/capacatiy.dart';
 import 'package:sihati/features/order/presentation/cubit/order_cubit.dart';
 import 'package:sihati/features/products/models/product_model.dart';
+import 'package:sihati/features/products/presentation/cubit/product_cubit.dart';
+import 'package:sihati/features/products/presentation/cubit/product_state.dart';
+import 'package:sihati/features/products/presentation/widgets/product_details_card.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   const ProductDetailsScreen({super.key, required this.product});
@@ -46,14 +51,16 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final quantityController = TextEditingController();
     final orderCubit = context.read<OrderCubit>();
 
     final onDelivery = orderCubit.getProductOnDelivery(widget.product.name);
     final delivered = orderCubit.getProductDelivered(widget.product.name);
 
-    final max = widget.product.maxquan ?? 0;
+    final max = widget.product.capacity ?? 0;
 
-    final currentTotal = max - delivered;
+    final currentTotal = widget.product.quantity ?? 0 - delivered;
+
     final remaining = currentTotal - onDelivery;
 
     final percentage = max > 0 ? currentTotal / max : 0;
@@ -132,7 +139,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                                 ? Offset(-10, 0)
                                 : Offset(10, 0),
                             child: Text(
-                              edit ? "Edit".tr() : "View".tr(),
+                              edit ? "Save".tr() : "Edit".tr(),
                               style: Style.subheader.copyWith(
                                 color: Colors.white,
                                 fontSize: 15,
@@ -154,151 +161,363 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         padding: EdgeInsets.all(15),
         child: SizedBox(
           width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: getProductColor(
-                    widget.product.color,
-                  ).withValues(alpha: .1),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Column(
-                  children: [
-                    ListTile(
-                      leading: Container(
-                        height: 100,
-                        width: 60,
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: .1),
-                              blurRadius: 1,
-                              offset: Offset(0, 3),
+          child: SingleChildScrollView(
+            physics: BouncingScrollPhysics(),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    color: getProductColor(
+                      widget.product.color,
+                    ).withValues(alpha: .1),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    children: [
+                      ListTile(
+                        leading: Container(
+                          height: 100,
+                          width: 60,
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withValues(alpha: .1),
+                                blurRadius: 1,
+                                offset: Offset(0, 3),
+                              ),
+                            ],
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
+                          child: SvgPicture.asset(
+                            fit: BoxFit.contain,
+                            AppImages.logo,
+                            colorFilter: ColorFilter.mode(
+                              getProductColor(widget.product.color),
+                              BlendMode.srcIn,
                             ),
-                          ],
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
+                          ),
                         ),
-                        padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
-                        child: SvgPicture.asset(
-                          fit: BoxFit.contain,
-                          AppImages.logo,
+                        title: Text(
+                          "${widget.product.name}",
+                          style: Style.loginSubTitle.copyWith(
+                            color: getProductColor(widget.product.color),
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        subtitle: Row(
+                          children: [
+                            Text("Remaining Quantity".tr()),
+                            Text(" : $remaining ${(widget.product.unit)!.tr()}"),
+                          ],
+                        ),
+                        trailing: SizedBox(
+                          height: 30,
+                          child: Capacatiy(
+                            borderRadius: BorderRadius.circular(15),
+                            percentage: percentage,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                        child: Column(
+                          children: [
+                            LinearProgressIndicator(
+                              minHeight: 8,
+                              value: max > 0 ? currentTotal / max : 0,
+                              backgroundColor: Colors.white,
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                percentage >= .7
+                                    ? Appcolors.slider
+                                    : percentage >= .3
+                                    ? Colors.orange
+                                    : Colors.red,
+                              ),
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            const Gap(4),
+            
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  '0',
+                                  style: Style.subheader.copyWith(
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                Text.rich(
+                                  TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: 'Remain'.tr(),
+                                        style: Style.subheader.copyWith(
+                                          fontSize: 12,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text:
+                                            ' ${(currentTotal / max * 100).toStringAsFixed(0)}%',
+                                        style: Style.subheader.copyWith(
+                                          fontSize: 12,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Text(
+                                  '$max ${(widget.product.unit)!.tr()}',
+                                  style: Style.subheader.copyWith(
+                                    fontSize: 12,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Gap(10),
+                          ],
+                        ),
+                      ),
+                      Gap(10),
+                    ],
+                  ),
+                ),
+                Gap(20),
+                ProductDetailsCard(widget: widget),
+                Gap(20),
+      //!-------------------------------------------------------------\\
+                Container(
+                  decoration: BoxDecoration(
+                    color: getProductColor(
+                      widget.product.color,
+                    ).withValues(alpha: .1),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.all(15),
+                    child: Row(
+                      children: [
+                        SvgPicture.asset(
+                          AppImages.tag,
                           colorFilter: ColorFilter.mode(
                             getProductColor(widget.product.color),
                             BlendMode.srcIn,
                           ),
                         ),
-                      ),
-                      title: Text(
-                        "${widget.product.name}",
-                        style: Style.loginSubTitle.copyWith(
-                          color: getProductColor(widget.product.color),
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      subtitle: Row(
-                        children: [
-                          Text("Remaining Quantity".tr()),
-                          Text(" : $remaining ${(widget.product.unit)!.tr()}"),
-                        ],
-                      ),
-                      trailing: SizedBox(
-                        height: 30,
-                        child: Capacatiy(
-                          borderRadius: BorderRadius.circular(15),
-                          percentage: percentage,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Column(
-                        children: [
-                          LinearProgressIndicator(
-                            minHeight: 8,
-                            value: max > 0 ? currentTotal / max : 0,
-                            backgroundColor: Colors.white,
-                            valueColor: AlwaysStoppedAnimation<Color>(
-                              percentage >= .7
-                                  ? Appcolors.slider
-                                  : percentage >= .3
-                                  ? Colors.orange
-                                  : Colors.red,
-                            ),
-                            borderRadius: BorderRadius.circular(16),
+                        Gap(10),
+                        Text(
+                          "Total Amount Price".tr(),
+                          style: Style.subheader.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: getProductColor(widget.product.color),
                           ),
-                          const Gap(4),
-
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        ),
+                        Spacer(),
+                        Text(
+                          "${(currentTotal) * (widget.product.price ?? 0)} ${"L.E".tr()}",
+                          style: Style.subheader.copyWith(
+                            fontWeight: FontWeight.w600,
+                            color: getProductColor(widget.product.color),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Gap(20),
+                //!---------------------------------------------------------------------------------\\
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(15),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: .1),
+                              blurRadius: 1,
+                              offset: Offset(1, 3),
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: Column(
                             children: [
                               Text(
-                                '0',
-                                style: Style.subheader.copyWith(
-                                  fontSize: 12,
-                                  color: Colors.black,
+                                "$onDelivery ${(widget.product.unit)!.tr()}",
+                                style: Style.loginSubTitle.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  color: Appcolors.l2,
                                 ),
                               ),
-                              Text.rich(
-                                TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: 'Remain'.tr(),
-                                      style: Style.subheader.copyWith(
-                                        fontSize: 12,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                    TextSpan(
-                                      text:
-                                          ' ${(currentTotal / max * 100).toStringAsFixed(0)}%',
-                                      style: Style.subheader.copyWith(
-                                        fontSize: 12,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w600,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
+                              Gap(5),
                               Text(
-                                '$max ${(widget.product.unit)!.tr()}',
+                                "On Delivery".tr(),
                                 style: Style.subheader.copyWith(
-                                  fontSize: 12,
-                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.grey,
                                 ),
                               ),
                             ],
                           ),
+                        ),
+                      ),
+                    ),
+                    Gap(15),
+                    Expanded(
+                      child: Container(
+                        padding: EdgeInsets.all(15),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: .1),
+                              blurRadius: 1,
+                              offset: Offset(1, 3),
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: Column(
+                            children: [
+                              Text(
+                                currentTotal >= 1000
+                                    ? "${(currentTotal / 1000).toInt().toStringAsFixed(1)}K ${(widget.product.unit)!.tr()}"
+                                    : "${currentTotal.toInt()} ${(widget.product.unit)!.tr()}",
+                                style: Style.loginSubTitle.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  color: Appcolors.l2,
+                                ),
+                              ),
+                              Gap(5),
+                              Text(
+                                "Available".tr(),
+                                style: Style.subheader.copyWith(
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Gap(20),
+                BlocListener<ProductCubit, ProductState>(
+                  listener: (context, state) {
+                    if (state is ProductFailure) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(state.error),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                    } else if (state is ProductSuccess) {
+                      pushReplacementTo(context,Routes.dashboard);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text("Quantity added successfully".tr()),
+                          backgroundColor: Colors.green,
+                        ),
+                      );
+                    }
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(15),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: .1),
+                          blurRadius: 1,
+                          offset: Offset(1, 3),
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Add Quantity To Stock".tr(),
+                            style: Style.subheader.copyWith(
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey,
+                            ),
+                          ),
                           Gap(10),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: TextFormField(
+                                  textAlign: TextAlign.center,
+                                  keyboardType: TextInputType.number,
+                                  decoration: InputDecoration(
+                                    hintText: "Enter Quantity".tr(),
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  controller: quantityController,
+                                ),
+                              ),
+                              Gap(10),
+                              Text(
+                                (widget.product.unit)!.tr(),
+                                style: Style.subheader.copyWith(
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              Gap(10),
+                              SizedBox(
+                                height: 50,
+                                width: 100,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Appcolors.l1,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    context.read<ProductCubit>().addToStock(
+                                      productId: widget.product.id!,
+                                      quantity:
+                                          double.tryParse(
+                                            quantityController.text,
+                                          ) ??
+                                          0,
+                                    );
+                                  },
+                                  child: Text(
+                                    "Add".tr(),
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                     ),
-                    Gap(10),
-                  ],
+                  ),
                 ),
-              ),
-              Gap(20),
-              Container(
-                padding: EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                      blurRadius: 5,
-                      color: Colors.black.withValues(alpha: .1),
-                      offset: Offset(0, 3),
-                    ),
-                  ],
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Column(children: [
-                  Row(children: [],)
-                ],)
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

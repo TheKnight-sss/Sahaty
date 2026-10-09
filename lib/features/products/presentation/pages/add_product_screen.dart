@@ -91,7 +91,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
                       ProductCardDetails(
                         productname: cubit.productnameController,
                         price: cubit.priceController,
-                        quantity: cubit.quantityController,
+                        quantity: cubit.capacityController,
                         selectedUnit: selectedUnit,
                         onBoxTap: () {
                           setState(() {

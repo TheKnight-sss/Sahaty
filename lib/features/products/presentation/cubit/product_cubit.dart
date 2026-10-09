@@ -9,7 +9,7 @@ class ProductCubit extends Cubit<ProductState> {
   ProductModel? productmodel;
   List<ProductModel> products = [];
   final productnameController = TextEditingController();
-  final quantityController = TextEditingController();
+  final capacityController = TextEditingController();
   final priceController = TextEditingController();
   final formkey = GlobalKey<FormState>();
 
@@ -19,26 +19,25 @@ class ProductCubit extends Cubit<ProductState> {
     }
 
     try {
-
       final productName = productnameController.text.trim();
 
-    // Check if product already exists
-    final existingProduct = await FirebaseFirestore.instance
-        .collection("Products")
-        .where("name", isEqualTo: productName)
-        .limit(1)
-        .get();
+      // Check if product already exists
+      final existingProduct = await FirebaseFirestore.instance
+          .collection("Products")
+          .where("name", isEqualTo: productName)
+          .limit(1)
+          .get();
 
-    if (existingProduct.docs.isNotEmpty) {
-      emit(ProductFailure("Product already exists"));
-      return;
-    }
+      if (existingProduct.docs.isNotEmpty) {
+        emit(ProductFailure("Product already exists"));
+        return;
+      }
 
       productmodel = ProductModel(
         id: "",
         name: productName,
         price: double.tryParse(priceController.text),
-        maxquan: double.tryParse(quantityController.text),
+        capacity: double.tryParse(capacityController.text),
         unit: unit,
         color: color,
       );
@@ -52,7 +51,7 @@ class ProductCubit extends Cubit<ProductState> {
           id: doc.id,
           name: productmodel!.name,
           price: productmodel!.price,
-          maxquan: productmodel!.maxquan,
+          capacity: productmodel!.capacity,
           unit: productmodel!.unit,
           color: productmodel!.color,
         ),
@@ -79,9 +78,24 @@ class ProductCubit extends Cubit<ProductState> {
     }
   }
 
-  void resetProduct(){
+  Future<void> addToStock({
+    required String productId,
+    required double quantity,
+  }) async {
+    try {
+
+      await FirebaseFirestore.instance.collection('Products').doc(productId).update({
+        'quantity': FieldValue.increment(quantity),
+      });
+      await getProduct();
+    } catch (e) {
+      emit(ProductFailure(e.toString()));
+    }
+  }
+
+  void resetProduct() {
     productnameController.clear();
-    quantityController.clear();
+    capacityController.clear();
     priceController.clear();
   }
 }
