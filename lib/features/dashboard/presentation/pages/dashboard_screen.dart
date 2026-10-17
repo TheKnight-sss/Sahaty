@@ -291,22 +291,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                         '${date.minute.toString().padLeft(2, '0')} '
                                         '${date.hour >= 12 ? 'PM' : 'AM'}';
 
-                              return OrderCard(
-                                name: order.buyer ?? "",
-                                loc: order.location ?? "",
-                                price: order.cost ?? 0,
-                                time: formdate.toString(),
-                                rep: order.rep,
-                                status: order.status,
-                                ontap: () {
-                                  context.read<OrderCubit>().updateState(order);
+                              return GestureDetector(
+                                onTap: () {
+                                  pushTo(context, Routes.orderdetails,extra: order);
                                 },
-                                updaterep: (rep) {
-                                  context.read<OrderCubit>().updateOrderRep(
-                                    order,
-                                    rep,
-                                  );
-                                },
+                                child: OrderCard(
+                                  name: order.buyer ?? "",
+                                  loc: order.location ?? "",
+                                  price: order.cost ?? 0,
+                                  time: formdate.toString(),
+                                  rep: order.rep,
+                                  status: order.status,
+                                  ontap: () {
+                                    context.read<OrderCubit>().updateState(order);
+                                  },
+                                  updaterep: (rep) {
+                                    context.read<OrderCubit>().updateOrderRep(
+                                      order,
+                                      rep,
+                                    );
+                                  },
+                                ),
                               );
                             },
                             separatorBuilder: (context, index) {

@@ -11,7 +11,6 @@ import 'package:sihati/features/dashboard/presentation/widgets/notes.dart';
 import 'package:sihati/features/order/models/order_model.dart';
 import 'package:sihati/features/order/models/rep_model.dart';
 import 'package:sihati/features/order/presentation/cubit/buyer_state.dart';
-import 'package:sihati/features/order/presentation/cubit/order_cubit.dart';
 import 'package:sihati/features/order/presentation/cubit/person_cubit.dart';
 
 class OrderCard extends StatefulWidget {

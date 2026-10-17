@@ -11,9 +11,15 @@ class ProductDetailsCard extends StatelessWidget {
   const ProductDetailsCard({
     super.key,
     required this.widget,
+    required this.remain,
+    required this.edit,
+    required this.pricecontroller,
   });
 
   final ProductDetailsScreen widget;
+  final double remain;
+  final bool edit;
+  final TextEditingController pricecontroller;
 
   @override
   Widget build(BuildContext context) {
@@ -45,14 +51,11 @@ class ProductDetailsCard extends StatelessWidget {
               children: [
                 SvgPicture.asset(
                   AppImages.layers,
-                  colorFilter: ColorFilter.mode(
-                    Appcolors.l1,
-                    BlendMode.srcIn,
-                  ),
+                  colorFilter: ColorFilter.mode(Appcolors.l1, BlendMode.srcIn),
                 ),
                 Gap(10),
                 Text(
-                  "Total Amount".tr(),
+                  "Total Quantity".tr(),
                   style: Style.subheader.copyWith(
                     fontWeight: FontWeight.w600,
                     color: Colors.black,
@@ -60,7 +63,7 @@ class ProductDetailsCard extends StatelessWidget {
                 ),
                 Spacer(),
                 Text(
-                  "${widget.product.capacity} ${widget.product.unit!.tr()}",
+                  "$remain ${widget.product.unit!.tr()}",
                   style: Style.subheader.copyWith(
                     fontWeight: FontWeight.w600,
                     color: Colors.black,
@@ -98,13 +101,31 @@ class ProductDetailsCard extends StatelessWidget {
                   ),
                 ),
                 Spacer(),
-                Text(
-                  "${widget.product.price} ${"L.E".tr()}",
-                  style: Style.subheader.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,
-                  ),
-                ),
+                edit
+                    ? Row(
+                        children: [
+                          SizedBox(
+                            width: 100,
+                            child: TextField(
+                              controller: pricecontroller,
+                              textAlign: TextAlign.center,
+                              keyboardType: TextInputType.numberWithOptions(
+                                decimal: true,
+                              ),
+                              decoration: InputDecoration(),
+                            ),
+                          ),
+                          Gap(10),
+                          Text("L.E".tr()),
+                        ],
+                      )
+                    : Text(
+                        "${widget.product.price} ${"L.E".tr()}",
+                        style: Style.subheader.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
+                      ),
               ],
             ),
           ),
@@ -115,14 +136,11 @@ class ProductDetailsCard extends StatelessWidget {
               children: [
                 SvgPicture.asset(
                   AppImages.alert,
-                  colorFilter: ColorFilter.mode(
-                    Colors.yellow,
-                    BlendMode.srcIn,
-                  ),
+                  colorFilter: ColorFilter.mode(Colors.yellow, BlendMode.srcIn),
                 ),
                 Gap(10),
                 Text(
-                  "Total Amount".tr(),
+                  "Alert At".tr(),
                   style: Style.subheader.copyWith(
                     fontWeight: FontWeight.w600,
                     color: Colors.black,
@@ -130,7 +148,7 @@ class ProductDetailsCard extends StatelessWidget {
                 ),
                 Spacer(),
                 Text(
-                  "${(widget.product.capacity??0)*.25} ${widget.product.unit!.tr()}",
+                  "${(widget.product.capacity ?? 0) * .25} ${widget.product.unit!.tr()}",
                   style: Style.subheader.copyWith(
                     fontWeight: FontWeight.w600,
                     color: Colors.black,
@@ -138,7 +156,7 @@ class ProductDetailsCard extends StatelessWidget {
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

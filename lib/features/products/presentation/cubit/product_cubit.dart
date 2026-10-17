@@ -78,15 +78,37 @@ class ProductCubit extends Cubit<ProductState> {
     }
   }
 
+  Future<void> updateProduct({required String productId,String? name,
+  double? price,}) async {
+    try {
+      final Map<String, dynamic>updates = {};
+
+      if (name != null) {
+        updates['name'] = name.trim();        
+      }
+      if (price != null) {
+        updates['price'] = price;        
+      }
+      if (updates.isEmpty) return;
+      await FirebaseFirestore.instance
+          .collection('Products')
+          .doc(productId)
+          .update(updates);
+          await getProduct();
+    } catch (e) {
+      emit(ProductFailure(e.toString()));
+    }
+  }
+
   Future<void> addToStock({
     required String productId,
     required double quantity,
   }) async {
     try {
-
-      await FirebaseFirestore.instance.collection('Products').doc(productId).update({
-        'quantity': FieldValue.increment(quantity),
-      });
+      await FirebaseFirestore.instance
+          .collection('Products')
+          .doc(productId)
+          .update({'quantity': FieldValue.increment(quantity)});
       await getProduct();
     } catch (e) {
       emit(ProductFailure(e.toString()));

@@ -3,8 +3,10 @@ import 'package:go_router/go_router.dart';
 import 'package:sihati/features/auth/presentation/pages/login_screen.dart';
 import 'package:sihati/features/auth/presentation/pages/signin_screen.dart';
 import 'package:sihati/features/dashboard/presentation/pages/dashboard_screen.dart';
+import 'package:sihati/features/order/models/order_model.dart';
 import 'package:sihati/features/order/presentation/pages/addorder_attributes_screen.dart';
 import 'package:sihati/features/order/presentation/pages/addorder_screen.dart';
+import 'package:sihati/features/order/presentation/pages/order_details_screen.dart';
 import 'package:sihati/features/products/models/product_model.dart';
 import 'package:sihati/features/products/presentation/pages/add_product_screen.dart';
 import 'package:sihati/features/order/presentation/pages/select_orderitem_screen.dart';
@@ -35,6 +37,8 @@ class Routes {
   static const String selectorderitem = '/selectorderitem';
   //! add attribute
   static const String addattribute = '/addatribute';
+  //! order details
+  static const String orderdetails = '/orderdetails';
 
   static final GoRouter route = GoRouter(
     navigatorKey: navigatorKey,
@@ -59,7 +63,11 @@ class Routes {
       GoRoute(path: productdetails, builder: (context, state) {
         var product = state.extra as ProductModel;
         return ProductDetailsScreen(product: product);
-      })
+      }),
+      GoRoute(path: orderdetails, builder: (context, state) {
+        var order = state.extra as OrderModel;
+        return OrderDetailsScreen(order : order);
+      },)
     ],
   );
 }
