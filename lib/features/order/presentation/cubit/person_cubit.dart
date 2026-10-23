@@ -50,8 +50,8 @@ class PersonCubit extends Cubit<PersonState> {
         location: buyer.location,
         phone: buyer.phone,
       );
-
       buyersList.add(newbuyer);
+      emit(PersonLoaded());
     } catch (e) {
       emit(PersonFailure(e.toString()));
     }
@@ -104,7 +104,6 @@ class PersonCubit extends Cubit<PersonState> {
 
   Future<void> getReps() async {
     try {
-      emit(PersonLoading());
       final snapshot = await FirebaseFirestore.instance
           .collection('Reps')
           .get();

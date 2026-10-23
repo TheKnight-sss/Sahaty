@@ -93,13 +93,37 @@ class ProductDetailsCard extends StatelessWidget {
                   ),
                 ),
                 Gap(10),
-                Text(
-                  "Price/ ${widget.product.unit!.tr()}".tr(),
-                  style: Style.subheader.copyWith(
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,
+                Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: "Price".tr(),
+                        style: Style.subheader.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
+                      ),
+                      TextSpan(
+                        text: "/",
+                        style: Style.subheader.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
+                      ),
+                      TextSpan(
+                        text: widget.product.unit!.tr(),
+                        style: Style.subheader.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
+                // Text(
+                //   "Price".tr()"/ ${widget.product.unit!.tr()}".tr(),
+
+                // ),
                 Spacer(),
                 edit
                     ? Row(

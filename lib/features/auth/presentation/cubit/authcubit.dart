@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sihati/features/auth/models/admin_model.dart';
-import 'package:sihati/features/auth/models/coRep_model.dart';
 import 'package:sihati/features/auth/models/user_type_enum.dart';
 import 'package:sihati/features/auth/presentation/cubit/authstate.dart';
 
@@ -11,7 +10,6 @@ class AuthCubit extends Cubit<Authstate> {
   AuthCubit() : super(AuthInitial());
 
   AdminModel? adminModel;
-  CoRepModel? coRepModel;
 
   final nameController = TextEditingController();
   final emailController = TextEditingController();
@@ -29,35 +27,24 @@ class AuthCubit extends Cubit<Authstate> {
           );
       User? user = credential.user;
       //! Use Photo URL as Role
-      await user?.updatePhotoURL(
-        type == UserTypeEnum.admin ? 'admin' : 'coRep',
+      await user!.updatePhotoURL(
+        'admin',
       );
-      await user?.updateDisplayName(nameController.text);
+      await user.updateDisplayName(nameController.text);
 
-      if (type == UserTypeEnum.admin) {
+      
         var admin = AdminModel(
-          id: user?.uid,
+          id: user.uid,
           name: nameController.text,
           email: emailController.text.trim(),
           phone: phoneController.text.trim(),
         );
         await FirebaseFirestore.instance
             .collection('admins')
-            .doc(user?.uid)
+            .doc(user.uid)
             .set(admin.toJson());
-      } else {
-        var coRep = CoRepModel(
-          id: user?.uid,
-          name: nameController.text,
-          email: emailController.text,
-          phoneNumber: phoneController.text,
-        );
-        await FirebaseFirestore.instance
-            .collection('coRep')
-            .doc(user?.uid)
-            .set(coRep.toJson());
-      }
-      emit(AuthSuccess(role: type, adminModel: adminModel, coRepModel: coRepModel));
+      
+      emit(AuthSuccess(role: type, adminModel: adminModel));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         emit(AuthFailure("كلمة المرور ضعيفة جدا"));
@@ -79,24 +66,22 @@ class AuthCubit extends Cubit<Authstate> {
         email: emailController.text.trim(),
         password: passwordController.text.trim(),
       );
-      final role = credential.user?.photoURL == 'admin'
-          ? UserTypeEnum.admin
-          : UserTypeEnum.coRep;
-      User? user = credential.user;
-      if (role == UserTypeEnum.admin) {
+      final role = credential.user!;
+          
+      
         var adminDoc = await FirebaseFirestore.instance
             .collection('admins')
-            .doc(user?.uid)
+            .doc(role.uid)
             .get();
+
+        if (!adminDoc.exists || adminDoc.data() == null) {
+      await FirebaseAuth.instance.signOut();
+      emit(AuthFailure("هذا الحساب ليس حساب مسؤول"));
+      return;
+    }    
         adminModel = AdminModel.fromJson(adminDoc.data()!);
-      } else {
-        var coRepDoc = await FirebaseFirestore.instance
-            .collection('coRep')
-            .doc(user?.uid)
-            .get();
-        coRepModel = CoRepModel.fromJson(coRepDoc.data()!);
-      }
-      emit(AuthSuccess(role: role, adminModel: adminModel, coRepModel: coRepModel));
+    
+      emit(AuthSuccess(role: UserTypeEnum.admin, adminModel: adminModel));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         emit(AuthFailure("المستخدم غير موجود"));
@@ -109,4 +94,21 @@ class AuthCubit extends Cubit<Authstate> {
       emit(AuthFailure("فشل في المصادقة"));
     }
   }
+
+  Future<void> logout() async {
+  emit(AuthLoading());
+
+  try {
+    await FirebaseAuth.instance.signOut();
+
+    adminModel = null;
+
+    emailController.clear();
+    passwordController.clear();
+
+    emit(AuthInitial());
+  } catch (e) {
+    emit(AuthFailure("فشل تسجيل الخروج، يرجى المحاولة مرة أخرى"));
+  }
+ }
 }

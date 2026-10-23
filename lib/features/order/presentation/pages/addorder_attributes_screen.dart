@@ -41,9 +41,8 @@ class _AddorderAttributesScreenState extends State<AddorderAttributesScreen> {
           listener: (context, state) {
             if (state is PersonLoading) {
               showLoadingDialog(context);
-            } else if (state is PersonLoaded) {
-              pop(context); // close loading dialog
-        
+            } else if (state is PersonLoaded) {  
+              pop(context);      
               pushReplacementTo(context, Routes.dashboard);
             }else if (state is PersonFailure){
               pop(context);
@@ -114,7 +113,6 @@ class _AddorderAttributesScreenState extends State<AddorderAttributesScreen> {
                           CustomButton(
                             onPressed: () {
                               cubit.addBuyers();
-                              pushReplacementTo(context,Routes.dashboard);
                             },
                             color1: Appcolors.splashup,
                             color2: Appcolors.splashcenter,

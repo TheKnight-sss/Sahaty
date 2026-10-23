@@ -14,6 +14,7 @@ class Appcolors {
   static const Color slider = Color(0xFF22C55E);
   static const Color slcard = Color(0xFF9CA3AF);
   static const Color pending = Color(0xFF8F6B35);
+  static const Color location = Color(0xFFF87171);
 
   
 }

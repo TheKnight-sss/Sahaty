@@ -62,29 +62,20 @@ class _LoginCardState extends State<LoginCard> {
             Gap(5),
             PasswordCustomField(controller: widget.passwordController),
             Gap(10),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                TextButton(
-                  onPressed: () {},
-                  child: Text(
-                    "نسيت كلمة المرور؟",
-                    style: TextStyle(color: Appcolors.login, fontSize: 16),
-                  ),
-                ),
-                Spacer(),
-                Text("تذكرني", style: Style.loginFieldLabel),
-                // Checkbox(
-                //   value: widget.rememberMe,
-                //   activeColor: Appcolors.login,
-                //   onChanged: (value) {
-                //     setState(() {
-                //       widget.rememberMe;
-                //     });
-                //   },
-                // ),
-              ],
-            ),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.end,
+            //   children: [
+            //     TextButton(
+            //       onPressed: () {},
+            //       child: Text(
+            //         "نسيت كلمة المرور؟",
+            //         style: TextStyle(color: Appcolors.login, fontSize: 16),
+            //       ),
+            //     ),
+            //     Spacer(),
+            //     Text("تذكرني", style: Style.loginFieldLabel),
+            //   ],
+            // ),
             Gap(20),
             CustomButton(
               color1: Appcolors.l1,

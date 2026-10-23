@@ -43,7 +43,7 @@ class OrderCubit extends Cubit<OrderState> {
   }
 
   //!updateProductQuantity////////////////////////////////////////////
-  void updateProductQuantity(int index, double quantity) {
+  Future<void> updateProductQuantity(int index, double quantity) async {
     final item = selectedOrderItems[index];
 
     selectedOrderItems[index] = OrderItemModel(
@@ -55,6 +55,45 @@ class OrderCubit extends Cubit<OrderState> {
     );
 
     emit(OrderItemsUpdated());
+  }
+
+  // //!updateExistingOrderProductQuantity///////////////////////
+  Future<void> updateExistingOrderProductQuantity(
+    OrderModel order,
+    int index,
+    double quantity,
+  ) async {
+    final products = List<OrderItemModel>.from(order.orderlist ?? []);
+
+    if (index < 0 || index >= products.length) return;
+
+    final item = products[index];
+
+    products[index] = OrderItemModel(
+      name: item.name,
+      unit: item.unit,
+      price: item.price,
+      quantity: quantity,
+      color: item.color,
+    );
+    final updatedCost = products.fold<double>(
+      0,
+      (total, item) => total + (item.price ?? 0) * (item.quantity ?? 0),
+    );
+
+    try {
+      await FirebaseFirestore.instance
+          .collection('Orders')
+          .doc(order.id)
+          .update({
+            'orderlist': products.map((item) => item.toJson()).toList(),
+            'cost': updatedCost,
+          });
+
+      await getOrder();
+    } catch (e) {
+      emit(OrderFailure(e.toString()));
+    }
   }
 
   //!updateOrderRep////////////////////////////
@@ -158,7 +197,6 @@ class OrderCubit extends Cubit<OrderState> {
 
   Future<void> getOrder() async {
     try {
-      emit(OrderLoading());
       final snapshot = await FirebaseFirestore.instance
           .collection('Orders')
           .orderBy('createdAt', descending: true)
@@ -180,25 +218,27 @@ class OrderCubit extends Cubit<OrderState> {
   //!getOrderonDelivering/////////////////////////////
 
   double getProductOnDelivery(String? productName) {
-  double total = 0;
+    double total = 0;
 
-  for (final order in orderList) {
-    if (order.status == OrderStatus.onDelivering) {
-      for (final item in order.orderlist ?? []) {
-        if (item.name == productName) {
-          total += item.quantity ?? 0;
+    for (final order in orderList) {
+      if (order.status == OrderStatus.onDelivering) {
+        for (final item in order.orderlist ?? []) {
+          if (item.name == productName) {
+            total += item.quantity ?? 0;
+          }
         }
       }
     }
+
+    return total;
   }
 
-  return total;
-}
- //!getProductCurrent\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+  //!getProductCurrent\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
   double getProductCurrent(String? productname) {
     double total = 0;
     for (final order in orderList) {
-      if (order.status == OrderStatus.onDelivering || order.status == OrderStatus.delivered  ) {
+      if (order.status == OrderStatus.onDelivering ||
+          order.status == OrderStatus.delivered) {
         for (final item in order.orderlist ?? []) {
           if (item.name == productname) {
             total += item.quantity ?? 0;
@@ -209,22 +249,23 @@ class OrderCubit extends Cubit<OrderState> {
 
     return total;
   }
-//!getProductDelivered\\\\\\\\\\\\\\
-  double getProductDelivered(String? productName) {
-  double total = 0;
 
-  for (final order in orderList) {
-    if (order.status == OrderStatus.delivered) {
-      for (final item in order.orderlist ?? []) {
-        if (item.name == productName) {
-          total += item.quantity ?? 0;
+  //!getProductDelivered\\\\\\\\\\\\\\
+  double getProductDelivered(String? productName) {
+    double total = 0;
+
+    for (final order in orderList) {
+      if (order.status == OrderStatus.delivered) {
+        for (final item in order.orderlist ?? []) {
+          if (item.name == productName) {
+            total += item.quantity ?? 0;
+          }
         }
       }
     }
-  }
 
-  return total;
-}
+    return total;
+  }
   //!resetOrder////////////////////////////////////////
 
   void resetOrder() {

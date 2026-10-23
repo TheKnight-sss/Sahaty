@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -60,7 +61,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     final percentage = max > 0 ? currentTotal / max : 0;
     return Scaffold(
       appBar: ProductDetailsBar(
-        title: "Product Details",
+        title: "Product Details".tr(),
         edit: edit,
         onEditTap: () {
           setState(() {

@@ -25,7 +25,6 @@ class SigninScreen extends StatefulWidget {
 }
 
 class _SigninScreenState extends State<SigninScreen> {
-    UserTypeEnum selecteduser = UserTypeEnum.coRep;
   @override
   Widget build(BuildContext context) {
     var cubit = context.read<AuthCubit>();
@@ -41,7 +40,7 @@ class _SigninScreenState extends State<SigninScreen> {
             "تم إنشاء الحساب بنجاح",
             type: DialogType.success,
           );
-          if (selecteduser == UserTypeEnum.admin) {
+          if (state.role == UserTypeEnum.admin) {
             goToBase(context, Routes.login);
           } else {
             goToBase(context, Routes.login);
@@ -196,37 +195,7 @@ class _SigninScreenState extends State<SigninScreen> {
                         PasswordCustomField(
                           controller: cubit.passwordController,
                         ),
-                        Gap(10),
-                        CustomButton(
-                          onPressed: () {
-                            setState(() {
-                             selecteduser = UserTypeEnum.admin;
-                            });
-                          },                          
-                          color1: selecteduser == UserTypeEnum.admin?  Color(0xFF16A34A) : Color(0xFF166534) ,
-                          color2: selecteduser == UserTypeEnum.admin? Color(0xFF15803D) :  Color(0xFF166534),
-                          color3: selecteduser == UserTypeEnum.admin? Color(0xFF166534):  Color(0xFF166534),
-                          child: Text(
-                            "Admin",
-                            style: TextStyle(color: Colors.white, fontSize: 18),
-                          ),
-                        ),
-                        Gap(20),
-                        CustomButton(
-                          color1: Color(0xFF16A34A),
-                          color2: Color(0xFF15803D),
-                          color3: Color(0xFF166534),
-                          child: Text(
-                            "إنشاء حساب",
-                            style: TextStyle(color: Colors.white, fontSize: 18),
-                          ),
-                          onPressed: () {
-                              debugPrint("selecteduser = $selecteduser");
-                            if (widget._formKey.currentState!.validate()) {
-                              cubit.register(type: selecteduser);
-                            }
-                          },
-                        ),
+                        
                       ],
                     ),
                   ),

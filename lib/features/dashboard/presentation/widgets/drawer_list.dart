@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:sihati/core/constants/app_images.dart';
@@ -7,6 +8,7 @@ import 'package:sihati/core/routes/navigation.dart';
 import 'package:sihati/core/routes/routes.dart';
 import 'package:sihati/core/utils/appcolors.dart';
 import 'package:sihati/core/utils/style.dart';
+import 'package:sihati/features/auth/presentation/cubit/authcubit.dart';
 
 class DrawerList extends StatelessWidget {
   const DrawerList({
@@ -89,19 +91,12 @@ class DrawerList extends StatelessWidget {
           },
           leading:Icon(Icons.add_circle_outline_sharp) ,
         ),
-        
-        ListTile(
-          leading: Icon(Icons.settings),
-          title: Text('Settings'.tr()),
-          onTap: () {
-            Navigator.pop(context);
-          },
-        ),
         ListTile(
           leading: Icon(Icons.logout),
           title: Text('Logout'.tr()),
           onTap: () {
-            Navigator.pop(context);
+            context.read<AuthCubit>().logout();
+            goToBase(context, Routes.login);
           },
         ),
       ],

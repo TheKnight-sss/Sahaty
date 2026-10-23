@@ -42,7 +42,6 @@ class _LoginScreenState extends State<LoginScreen> {
             if (state.role == UserTypeEnum.admin) {
               pushTo(context, Routes.dashboard);
             }
-            if (state.role == UserTypeEnum.coRep) {}
           }
           if (state is AuthFailure) {
             Navigator.pop(context);
@@ -69,32 +68,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   emailController: cubit.emailController,
                   passwordController: cubit.passwordController,
                   formKey: widget._formKey,
-                ),
-                Gap(15),
-                Row(
-                  children: [
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            widget.user = UserTypeEnum.admin;
-                          });
-                        },
-                        child: const Text("Admin"),
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          setState(() {
-                            widget.user = UserTypeEnum.coRep;
-                          });
-                        },
-                        child: const Text("CoRep"),
-                      ),
-                    ),
-                  ],
                 ),
               ],
             ),

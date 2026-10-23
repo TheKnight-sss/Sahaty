@@ -64,7 +64,6 @@ class ProductCubit extends Cubit<ProductState> {
 
   Future<void> getProduct() async {
     try {
-      emit(ProductInitial());
       final snapshot = await FirebaseFirestore.instance
           .collection("Products")
           .get();

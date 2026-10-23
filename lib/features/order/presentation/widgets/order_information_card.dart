@@ -71,7 +71,7 @@ class _OrderInformationCardState extends State<OrderInformationCard> {
                   ],
                 ),
                 Gap(10),
-                Head(head: "Buyer"),
+                Head(head: "Buyer".tr()),
                 Gap(5),
                 DropdownButtonFormField<BuyerModel>(
                   decoration: InputDecoration(
@@ -93,7 +93,7 @@ class _OrderInformationCardState extends State<OrderInformationCard> {
                   },
                 ),
                 Gap(15),
-                Head(head: "Location"),
+                Head(head: "Location".tr()),
                 TextField(
                   controller: cubit.locationcontroller,
                   readOnly: true,

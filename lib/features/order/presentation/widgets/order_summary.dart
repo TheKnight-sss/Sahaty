@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -32,7 +33,7 @@ class OrderSummary extends StatelessWidget {
             Row(
               children: [
                 Image.asset(AppImages.wallet, width: 45, height: 45),
-                Text("Order Summary", style: Style.loginFieldLabel),
+                Text("Order Summary".tr(), style: Style.loginFieldLabel),
               ],
             ),
             Gap(10),
@@ -42,11 +43,34 @@ class OrderSummary extends StatelessWidget {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      "Total Items: ${cubit.selectedOrderItems.length} ",
-                      style: Style.loginFieldLabel,
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "Total Items".tr(),
+                            style: Style.loginFieldLabel,
+                          ),
+                          TextSpan(
+                            text: ": ${cubit.selectedOrderItems.length} ",
+                            style: Style.loginFieldLabel,
+                          ),
+                        ],
+                      ),
                     ),
-                    Text("Total Price: ${cubit.updateOrderTotalPrice()} ", style: Style.loginFieldLabel),
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "Total Price".tr(),
+                            style: Style.loginFieldLabel,
+                          ),
+                          TextSpan(
+                            text: ": ${cubit.updateOrderTotalPrice()} ",
+                            style: Style.loginFieldLabel,
+                          ),
+                        ],
+                      ),
+                    ),
                   ],
                 );
               },
